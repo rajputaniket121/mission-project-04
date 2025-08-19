@@ -6,15 +6,15 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import in.co.rays.proj4.bean.RoleBean;
-import in.co.rays.proj4.model.RoleModel;
+import in.co.rays.proj4.bean.CourseBean;
+import in.co.rays.proj4.model.CourseModel;
 
-public class TestRoleModel {
-
+public class TestCourseModel {
+	
 	public static void main(String[] args) throws SQLException {
-		//testAddRole();
-		testUpdateRole();
-		//testDeleteRole();
+		//testAddCourse();
+		//testUpdateCourse();
+		//testDeleteCourse();
 		//testFindByPk();
 		//testFindByName();
 		//testSearch();
@@ -22,43 +22,46 @@ public class TestRoleModel {
 	}
 	
 	
-	public static void testAddRole() throws SQLException {
-		RoleModel model = new RoleModel();
-		RoleBean bean = new RoleBean();
-		bean.setName("User");
-		bean.setDescription("User");
+	public static void testAddCourse() throws SQLException {
+		CourseModel model = new CourseModel();
+		CourseBean bean = new CourseBean();
+		bean.setName("Java");
+		bean.setDescription("Java course");
+		bean.setDuration("3 months");
 		bean.setCreatedBy("Aniket");
 		bean.setModifiedBy("Aniket");
 		bean.setCreatedDateTime(new Timestamp(new Date().getTime()));
 		bean.setModifiedDateTime(new Timestamp(new Date().getTime()));
-		Long id =  model.addRole(bean);
-		System.out.println("Role added with id "+id);
+		Long id =  model.addCourse(bean);
+		System.out.println("Course added with id "+id);
 	}
 	
-	public static void testUpdateRole() throws SQLException {
-		RoleModel model = new RoleModel();
-		RoleBean bean = new RoleBean();
+	public static void testUpdateCourse() throws SQLException {
+		CourseModel model = new CourseModel();
+		CourseBean bean = new CourseBean();
 		bean.setId(1l);
-		bean.setName("Admin");
-		bean.setDescription("Super Admin");
+		bean.setName("Python");
+		bean.setDescription("Core python");
+		bean.setDuration("2 months");
 		bean.setCreatedBy("Anurag");
 		bean.setModifiedBy("Aniket");
 		bean.setCreatedDateTime(new Timestamp(new Date().getTime()));
 		bean.setModifiedDateTime(new Timestamp(new Date().getTime()));
-		model.updateRole(bean);
+		model.updateCourse(bean);
 	}
 	
-	public static void testDeleteRole() throws SQLException {
-		RoleModel model = new RoleModel();
-		model.deleteRole(2l);
+	public static void testDeleteCourse() throws SQLException {
+		CourseModel model = new CourseModel();
+		model.deleteCourse(2l);
 	}
 	
 	public static void testFindByPk() throws SQLException {
-		RoleModel model = new RoleModel();
-		RoleBean bean = model.findByPk(1l);
+		CourseModel model = new CourseModel();
+		CourseBean bean = model.findByPk(1l);
 		System.out.println(bean.getId());
 		System.out.println(bean.getName());
 		System.out.println(bean.getDescription());
+		System.err.println(bean.getDuration());
 		System.out.println(bean.getCreatedBy());
 		System.out.println(bean.getModifiedBy());
 		System.out.println(bean.getCreatedDateTime());
@@ -67,11 +70,12 @@ public class TestRoleModel {
 	}
 	
 	public static void testFindByName() throws SQLException {
-		RoleModel model = new RoleModel();
-		RoleBean bean = model.findByName("Admin");
+		CourseModel model = new CourseModel();
+		CourseBean bean = model.findByName("Admin");
 		System.out.println(bean.getId());
 		System.out.println(bean.getName());
 		System.out.println(bean.getDescription());
+		System.out.println(bean.getDuration());
 		System.out.println(bean.getCreatedBy());
 		System.out.println(bean.getModifiedBy());
 		System.out.println(bean.getCreatedDateTime());
@@ -80,15 +84,16 @@ public class TestRoleModel {
 	}
 	
 	public static void testSearch() throws SQLException {
-		RoleModel model = new RoleModel();
-		List<RoleBean> list = model.search(null, 1, 5);
-		Iterator<RoleBean> it = list.iterator();
+		CourseModel model = new CourseModel();
+		List<CourseBean> list = model.search(null, 1, 5);
+		Iterator<CourseBean> it = list.iterator();
 		
 		while(it.hasNext()) {
-			RoleBean bean =  it.next();
+			CourseBean bean =  it.next();
 			System.out.println(bean.getId());
 			System.out.println(bean.getName());
 			System.out.println(bean.getDescription());
+			System.out.println(bean.getDuration());
 			System.out.println(bean.getCreatedBy());
 			System.out.println(bean.getModifiedBy());
 			System.out.println(bean.getCreatedDateTime());
@@ -97,15 +102,16 @@ public class TestRoleModel {
 	}
 	
 	public static void testList() throws SQLException {
-		RoleModel model = new RoleModel();
-		List<RoleBean> list = model.list();
-		Iterator<RoleBean> it = list.iterator();
+		CourseModel model = new CourseModel();
+		List<CourseBean> list = model.list();
+		Iterator<CourseBean> it = list.iterator();
 		
 		while(it.hasNext()) {
-			RoleBean bean =  it.next();
+			CourseBean bean =  it.next();
 			System.out.println(bean.getId());
 			System.out.println(bean.getName());
 			System.out.println(bean.getDescription());
+			System.out.println(bean.getDuration());
 			System.out.println(bean.getCreatedBy());
 			System.out.println(bean.getModifiedBy());
 			System.out.println(bean.getCreatedDateTime());

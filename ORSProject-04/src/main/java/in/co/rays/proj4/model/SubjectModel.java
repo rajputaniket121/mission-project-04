@@ -7,32 +7,34 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import in.co.rays.proj4.bean.RoleBean;
+import in.co.rays.proj4.bean.SubjectBean;
 import in.co.rays.proj4.util.JDBCDataSource;
 
-public class RoleModel {
-
-	public Long addRole(RoleBean bean) throws SQLException {
+public class SubjectModel {
+	
+	public Long addSubject(SubjectBean bean) throws SQLException {
 		Connection conn = null;
 		Long pk = 0l;
-		RoleBean exist = findByName(bean.getName());
+		SubjectBean exist = findByName(bean.getName());
 		if(exist!=null) {
-			throw new RuntimeException("Role already Exist");
+			throw new RuntimeException("Subject already Exist");
 		}
 		try {
 			conn = JDBCDataSource.getConnection();
 			pk = getNextPk();
 			conn.setAutoCommit(false);
-			PreparedStatement pstmt = conn.prepareStatement("insert into st_role values(?,?,?,?,?,?,?)");
+			PreparedStatement pstmt = conn.prepareStatement("insert into st_subject values(?,?,?,?,?,?,?,?,?)");
 			pstmt.setLong(1, pk);
 			pstmt.setString(2, bean.getName());
-			pstmt.setString(3, bean.getDescription());
-			pstmt.setString(4, bean.getCreatedBy());
-			pstmt.setString(5, bean.getModifiedBy());
-			pstmt.setTimestamp(6, bean.getCreatedDateTime());
-			pstmt.setTimestamp(7, bean.getModifiedDateTime());
+			pstmt.setLong(3, bean.getCourseId());
+			pstmt.setString(4, bean.getCourseName());
+			pstmt.setString(5, bean.getDescription());
+			pstmt.setString(6, bean.getCreatedBy());
+			pstmt.setString(7, bean.getModifiedBy());
+			pstmt.setTimestamp(8, bean.getCreatedDateTime());
+			pstmt.setTimestamp(9, bean.getModifiedDateTime());
 			int i = pstmt.executeUpdate();
-			System.out.println("New Role Added " + i);
+			System.out.println("New Subject Added " + i);
 			conn.commit();
 			pstmt.close();
 		} catch (Exception e) {
@@ -44,26 +46,28 @@ public class RoleModel {
 		return pk;
 	}
 
-	public void updateRole(RoleBean bean) throws SQLException {
+	public void updateSubject(SubjectBean bean) throws SQLException {
 		Connection conn = null;
-		RoleBean exist = findByName(bean.getName());
+		SubjectBean exist = findByName(bean.getName());
 		if(exist!=null && exist.getId() != bean.getId()) {
-			throw new RuntimeException("Role already Exist");
+			throw new RuntimeException("Subject already Exist");
 		}
 		try {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false);
 			PreparedStatement pstmt = conn.prepareStatement(
-					"update st_role set name = ?, description = ?, created_by = ?, modified_by = ?, created_datetime = ?, modified_datetime = ? where id = ?");
+					"update st_subject set name = ?, course_id = ?, course_name = ?, description = ?, created_by = ?, modified_by = ?, created_datetime = ?, modified_datetime = ? where id = ?");
 			pstmt.setString(1, bean.getName());
-			pstmt.setString(2, bean.getDescription());
-			pstmt.setString(3, bean.getCreatedBy());
-			pstmt.setString(4, bean.getModifiedBy());
-			pstmt.setTimestamp(5, bean.getCreatedDateTime());
-			pstmt.setTimestamp(6, bean.getModifiedDateTime());
-			pstmt.setLong(7, bean.getId());
+			pstmt.setLong(2, bean.getCourseId());
+			pstmt.setString(3, bean.getCourseName());
+			pstmt.setString(4, bean.getDescription());
+			pstmt.setString(5, bean.getCreatedBy());
+			pstmt.setString(6, bean.getModifiedBy());
+			pstmt.setTimestamp(7, bean.getCreatedDateTime());
+			pstmt.setTimestamp(8, bean.getModifiedDateTime());
+			pstmt.setLong(9, bean.getId());
 			int i = pstmt.executeUpdate();
-			System.out.println("Role updated " + i);
+			System.out.println("Subject updated " + i);
 			conn.commit();
 			pstmt.close();
 		} catch (Exception e) {
@@ -74,15 +78,15 @@ public class RoleModel {
 		}
 	}
 
-	public void deleteRole(Long id) throws SQLException {
+	public void deleteSubject(Long id) throws SQLException {
 		Connection conn = null;
 		try {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false);
-			PreparedStatement pstmt = conn.prepareStatement("delete from st_role where id = ?");
+			PreparedStatement pstmt = conn.prepareStatement("delete from st_subject where id = ?");
 			pstmt.setLong(1, id);
 			int i = pstmt.executeUpdate();
-			System.out.println("Role deleted " + i);
+			System.out.println("Subject deleted " + i);
 			conn.commit();
 			pstmt.close();
 		} catch (Exception e) {
@@ -93,24 +97,26 @@ public class RoleModel {
 		}
 	}
 
-	public RoleBean findByPk(Long id) throws SQLException {
+	public SubjectBean findByPk(Long id) throws SQLException {
 		Connection conn = null;
-		RoleBean bean = null;
-		StringBuffer sql = new StringBuffer("select * from st_role where id = ?");
+		SubjectBean bean = null;
+		StringBuffer sql = new StringBuffer("select * from st_subject where id = ?");
 		try {
 			conn = JDBCDataSource.getConnection();
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
 			pstmt.setLong(1, id);
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				bean = new RoleBean();
+				bean = new SubjectBean();
 				bean.setId(rs.getLong(1));
 				bean.setName(rs.getString(2));
-				bean.setDescription(rs.getString(3));
-				bean.setCreatedBy(rs.getString(4));
-				bean.setModifiedBy(rs.getString(5));
-				bean.setCreatedDateTime(rs.getTimestamp(6));
-				bean.setModifiedDateTime(rs.getTimestamp(7));
+				bean.setCourseId(rs.getLong(3));
+				bean.setCourseName(rs.getString(4));
+				bean.setDescription(rs.getString(5));
+				bean.setCreatedBy(rs.getString(6));
+				bean.setModifiedBy(rs.getString(7));
+				bean.setCreatedDateTime(rs.getTimestamp(8));
+				bean.setModifiedDateTime(rs.getTimestamp(9));
 			}
 			pstmt.close();
 			rs.close();
@@ -123,24 +129,26 @@ public class RoleModel {
 		return bean;
 	}
 
-	public RoleBean findByName(String name) throws SQLException {
+	public SubjectBean findByName(String name) throws SQLException {
 		Connection conn = null;
-		RoleBean bean = null;
-		StringBuffer sql = new StringBuffer("select * from st_role where name = ?");
+		SubjectBean bean = null;
+		StringBuffer sql = new StringBuffer("select * from st_subject where name = ?");
 		try {
 			conn = JDBCDataSource.getConnection();
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
 			pstmt.setString(1, name);
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				bean = new RoleBean();
+				bean = new SubjectBean();
 				bean.setId(rs.getLong(1));
 				bean.setName(rs.getString(2));
-				bean.setDescription(rs.getString(3));
-				bean.setCreatedBy(rs.getString(4));
-				bean.setModifiedBy(rs.getString(5));
-				bean.setCreatedDateTime(rs.getTimestamp(6));
-				bean.setModifiedDateTime(rs.getTimestamp(7));
+				bean.setCourseId(rs.getLong(3));
+				bean.setCourseName(rs.getString(4));
+				bean.setDescription(rs.getString(5));
+				bean.setCreatedBy(rs.getString(6));
+				bean.setModifiedBy(rs.getString(7));
+				bean.setCreatedDateTime(rs.getTimestamp(8));
+				bean.setModifiedDateTime(rs.getTimestamp(9));
 			}
 			pstmt.close();
 			rs.close();
@@ -153,14 +161,14 @@ public class RoleModel {
 		return bean;
 	}
 
-	public List<RoleBean> list() throws SQLException {
+	public List<SubjectBean> list() throws SQLException {
 		return search(null, 0, 0);
 	}
 
-	public List<RoleBean> search(RoleBean bean, int pageNo, int pageSize) throws SQLException {
+	public List<SubjectBean> search(SubjectBean bean, int pageNo, int pageSize) throws SQLException {
 		Connection conn = null;
-		StringBuffer sql = new StringBuffer("select * from st_role where 1 = 1");
-		List<RoleBean> roleList = new ArrayList<RoleBean>();
+		StringBuffer sql = new StringBuffer("select * from st_subject where 1 = 1");
+		List<SubjectBean> subjectList = new ArrayList<SubjectBean>();
 
 		if (bean != null) {
 			if (bean.getId() > 0) {
@@ -168,6 +176,12 @@ public class RoleModel {
 			}
 			if (bean.getName()!= null && bean.getName().length() > 0) {
 				sql.append(" and name like '" + bean.getName() + "%'");
+			}
+			if (bean.getCourseId()!= null && bean.getCourseId() > 0) {
+				sql.append(" and course_id like '" + bean.getCourseId() + "%'");
+			}
+			if (bean.getCourseName()!= null && bean.getCourseName().length() > 0) {
+				sql.append(" and course_name like '" + bean.getCourseName() + "%'");
 			}
 			if (bean.getDescription()!= null && bean.getDescription().length() > 0) {
 				sql.append(" and description like '" + bean.getDescription() + "%'");
@@ -185,15 +199,17 @@ public class RoleModel {
 			ResultSet rs = pstmt.executeQuery();
 
 			while (rs.next()) {
-				bean = new RoleBean();
+				bean = new SubjectBean();
 				bean.setId(rs.getLong(1));
 				bean.setName(rs.getString(2));
-				bean.setDescription(rs.getString(3));
-				bean.setCreatedBy(rs.getString(4));
-				bean.setModifiedBy(rs.getString(5));
-				bean.setCreatedDateTime(rs.getTimestamp(6));
-				bean.setModifiedDateTime(rs.getTimestamp(7));
-				roleList.add(bean);
+				bean.setCourseId(rs.getLong(3));
+				bean.setCourseName(rs.getString(4));
+				bean.setDescription(rs.getString(5));
+				bean.setCreatedBy(rs.getString(6));
+				bean.setModifiedBy(rs.getString(7));
+				bean.setCreatedDateTime(rs.getTimestamp(8));
+				bean.setModifiedDateTime(rs.getTimestamp(9));
+				subjectList.add(bean);
 			}
 			pstmt.close();
 			rs.close();
@@ -203,7 +219,7 @@ public class RoleModel {
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
-		return roleList;
+		return subjectList;
 	}
 
 	public Long getNextPk() throws SQLException {
@@ -211,7 +227,7 @@ public class RoleModel {
 		Long pk = 0l;
 		try {
 			conn = JDBCDataSource.getConnection();
-			PreparedStatement pstmt = conn.prepareStatement("select max(id) from st_role");
+			PreparedStatement pstmt = conn.prepareStatement("select max(id) from st_subject");
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				pk = rs.getLong(1) + 1l;
