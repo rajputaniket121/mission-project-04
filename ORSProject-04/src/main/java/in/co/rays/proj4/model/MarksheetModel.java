@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import in.co.rays.proj4.bean.MarksheetBean;
+import in.co.rays.proj4.exception.DatabaseException;
 import in.co.rays.proj4.util.JDBCDataSource;
 
 public class MarksheetModel {
@@ -238,7 +239,7 @@ public class MarksheetModel {
 		return marksheetList;
 	}
 
-	public Long getNextPk() throws SQLException {
+	public Long getNextPk() throws DatabaseException  {
 		Connection conn = null;
 		Long pk = 0l;
 		try {
@@ -246,17 +247,16 @@ public class MarksheetModel {
 			PreparedStatement pstmt = conn.prepareStatement("select max(id) from st_marksheet");
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				pk = rs.getLong(1) + 1l;
+				pk = rs.getLong(1);
 			}
 			pstmt.close();
 			rs.close();
 		} catch (Exception e) {
-			conn.rollback();
-			e.printStackTrace();
+			throw new DatabaseException("Exception in Marksheet getting PK");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
-		return pk;
+		return pk+1l;
 	}
 
 }

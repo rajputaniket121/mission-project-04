@@ -9,22 +9,24 @@ import java.util.Iterator;
 import java.util.List;
 
 import in.co.rays.proj4.bean.UserBean;
+import in.co.rays.proj4.exception.ApplicationException;
+import in.co.rays.proj4.exception.DuplicateRecordException;
 import in.co.rays.proj4.model.UserModel;
 
 public class TestUserModel {
 	
-	public static void main(String[] args) throws SQLException, ParseException {
-//		testAddUser();
+	public static void main(String[] args) throws ParseException, ApplicationException, DuplicateRecordException {
+	//	testAddUser();
 //		testUpdateUser();
 //		testDeleteUser();
 //		testFindByPk();
 //		testFindByLogin();
-//		testSearch();
-//		testList();
+		testSearch();
+	//	testList();
 	}
 	
 	
-	public static void testAddUser() throws SQLException, ParseException {
+	public static void testAddUser() throws ParseException, ApplicationException, DuplicateRecordException {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		UserModel model = new UserModel();
 		UserBean bean = new UserBean();
@@ -44,14 +46,14 @@ public class TestUserModel {
 		System.out.println("User added with id "+id);
 	}
 	
-	public static void testUpdateUser() throws SQLException, ParseException {
+	public static void testUpdateUser() throws ParseException, ApplicationException, DuplicateRecordException {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		UserModel model = new UserModel();
 		UserBean bean = new UserBean();
-		bean.setId(1l);
+		bean.setId(2l);
 		bean.setFirstName("Aniket");
 		bean.setLastName("Rajput");
-		bean.setLogin("aniket@gmail.com");
+		bean.setLogin("aniketrajput@gmail.com");
 		bean.setPassword("123");
 		bean.setDob(sdf.parse("12-02-2000"));
 		bean.setMobileNo("7898037387");
@@ -64,12 +66,12 @@ public class TestUserModel {
 		model.updateUser(bean);
 	}
 	
-	public static void testDeleteUser() throws SQLException {
+	public static void testDeleteUser() throws  ApplicationException {
 		UserModel model = new UserModel();
 		model.deleteUser(2l);
 	}
 	
-	public static void testFindByPk() throws SQLException {
+	public static void testFindByPk() throws  ApplicationException {
 		UserModel model = new UserModel();
 		UserBean bean = model.findByPk(1l);
 		System.out.println(bean.getId());
@@ -88,7 +90,7 @@ public class TestUserModel {
 		
 	}
 	
-	public static void testFindByLogin() throws SQLException {
+	public static void testFindByLogin() throws ApplicationException {
 		UserModel model = new UserModel();
 		UserBean bean = model.findByLogin("aniket@gmail.com");
 		System.out.println(bean.getId());
@@ -107,9 +109,13 @@ public class TestUserModel {
 		
 	}
 	
-	public static void testSearch() throws SQLException {
+	public static void testSearch() throws ApplicationException, ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		UserModel model = new UserModel();
-		List<UserBean> list = model.search(null, 1, 5);
+		UserBean bean1 = new UserBean();
+		bean1.setId(1l);
+		bean1.setDob(sdf.parse("12-02-2000"));
+		List<UserBean> list = model.search(bean1, 1, 5);
 		Iterator<UserBean> it = list.iterator();
 		
 		while(it.hasNext()) {
@@ -130,7 +136,7 @@ public class TestUserModel {
 		}
 	}
 	
-	public static void testList() throws SQLException {
+	public static void testList() throws ApplicationException {
 		UserModel model = new UserModel();
 		List<UserBean> list = model.list();
 		Iterator<UserBean> it = list.iterator();

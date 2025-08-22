@@ -3,21 +3,29 @@ package in.co.rays.proj4.model;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import in.co.rays.proj4.bean.CollegeBean;
 import in.co.rays.proj4.bean.StudentBean;
+import in.co.rays.proj4.exception.ApplicationException;
+import in.co.rays.proj4.exception.DatabaseException;
+import in.co.rays.proj4.exception.DuplicateRecordException;
 import in.co.rays.proj4.util.JDBCDataSource;
 
 public class StudentModel {
 	
-	public Long addStudent(StudentBean bean) throws SQLException {
+	public Long addStudent(StudentBean bean) throws ApplicationException,DuplicateRecordException {
 		Connection conn = null;
 		Long pk = 0l;
+		
+		CollegeModel collegeModel = new CollegeModel();
+		CollegeBean collegeBean = collegeModel.findByPk(bean.getCollegeId());
+		bean.setCollegeName(collegeBean.getName());
+		
 		StudentBean exist = findByEmail(bean.getEmail());
 		if(exist!=null) {
-			throw new RuntimeException("Email Id already Exist");
+			throw new DuplicateRecordException("Email Id already Exist");
 		}
 		try {
 			conn = JDBCDataSource.getConnection();
@@ -42,20 +50,29 @@ public class StudentModel {
 			conn.commit();
 			pstmt.close();
 		} catch (Exception e) {
-			conn.rollback();
+			try {
+				conn.rollback();
+			} catch (Exception ex) {
+				throw new ApplicationException("Exception : Add rollback exception " + ex.getMessage());
+			}
 			e.printStackTrace();
+			throw new ApplicationException("Exception : Exception in add Student");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 		return pk;
 	}
 
-	public void updateStudent(StudentBean bean) throws SQLException {
+	public void updateStudent(StudentBean bean) throws ApplicationException,DuplicateRecordException {
 		Connection conn = null;
 		StudentBean exist = findByEmail(bean.getEmail());
 		if(exist!=null && exist.getId() != bean.getId()) {
-			throw new RuntimeException("Email Id already Exist");
+			throw new DuplicateRecordException("Email Id already Exist");
 		}
+		CollegeModel collegeModel = new CollegeModel();
+		CollegeBean collegeBean = collegeModel.findByPk(bean.getCollegeId());
+		bean.setCollegeName(collegeBean.getName());
+		
 		try {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false);
@@ -79,14 +96,19 @@ public class StudentModel {
 			conn.commit();
 			pstmt.close();
 		} catch (Exception e) {
-			conn.rollback();
+			try {
+				conn.rollback();
+			} catch (Exception ex) {
+				throw new ApplicationException("Exception : Update rollback exception " + ex.getMessage());
+			}
 			e.printStackTrace();
+			throw new ApplicationException("Exception : Exception in Update Student");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 	}
 
-	public void deleteStudent(Long id) throws SQLException {
+	public void deleteStudent(Long id) throws ApplicationException {
 		Connection conn = null;
 		try {
 			conn = JDBCDataSource.getConnection();
@@ -98,14 +120,19 @@ public class StudentModel {
 			conn.commit();
 			pstmt.close();
 		} catch (Exception e) {
-			conn.rollback();
+			try {
+				conn.rollback();
+			} catch (Exception ex) {
+				throw new ApplicationException("Exception : Delete rollback exception " + ex.getMessage());
+			}
 			e.printStackTrace();
+			throw new ApplicationException("Exception : Exception in delete Student");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 	}
 
-	public StudentBean findByPk(Long id) throws SQLException {
+	public StudentBean findByPk(Long id) throws ApplicationException {
 		Connection conn = null;
 		StudentBean bean = null;
 		StringBuffer sql = new StringBuffer("select * from st_student where id = ?");
@@ -133,15 +160,15 @@ public class StudentModel {
 			pstmt.close();
 			rs.close();
 		} catch (Exception e) {
-			conn.rollback();
 			e.printStackTrace();
+			throw new ApplicationException("Exception : Exception in FindByPk Student");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 		return bean;
 	}
 
-	public StudentBean findByEmail(String email) throws SQLException {
+	public StudentBean findByEmail(String email) throws ApplicationException {
 		Connection conn = null;
 		StudentBean bean = null;
 		StringBuffer sql = new StringBuffer("select * from st_student where email = ?");
@@ -169,19 +196,19 @@ public class StudentModel {
 			pstmt.close();
 			rs.close();
 		} catch (Exception e) {
-			conn.rollback();
 			e.printStackTrace();
+			throw new ApplicationException("Exception : Exception in FindByEmail Student");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 		return bean;
 	}
 
-	public List<StudentBean> list() throws SQLException {
+	public List<StudentBean> list() throws ApplicationException {
 		return search(null, 0, 0);
 	}
 
-	public List<StudentBean> search(StudentBean bean, int pageNo, int pageSize) throws SQLException {
+	public List<StudentBean> search(StudentBean bean, int pageNo, int pageSize) throws ApplicationException {
 		Connection conn = null;
 		StringBuffer sql = new StringBuffer("select * from st_student where 1 = 1");
 		List<StudentBean> studentList = new ArrayList<StudentBean>();
@@ -246,15 +273,15 @@ public class StudentModel {
 			pstmt.close();
 			rs.close();
 		} catch (Exception e) {
-			conn.rollback();
 			e.printStackTrace();
+			throw new ApplicationException("Exception : Exception in search Student");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 		return studentList;
 	}
 	
-	public Long getNextPk() throws SQLException {
+	public Long getNextPk() throws DatabaseException {
 		Connection conn = null;
 		Long pk = 0l;
 		try {
@@ -262,19 +289,18 @@ public class StudentModel {
 			PreparedStatement pstmt=conn.prepareStatement("select max(id) from st_student");
 			ResultSet rs =  pstmt.executeQuery();
 			while(rs.next()) {
-				pk = rs.getLong(1)+1l;
+				pk = rs.getLong(1);
 			}
 			rs.close();
 			pstmt.close();
 			
 		}catch (Exception e) {
-			conn.rollback();
-			e.printStackTrace();
+			throw new DatabaseException("Exception : Exception In Getting pk");
 		}
 		finally {
 			JDBCDataSource.closeConnection(conn);
 		}
-		return pk;
+		return pk+1;
 	}
 
 }
