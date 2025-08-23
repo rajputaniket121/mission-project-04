@@ -3,18 +3,30 @@ package in.co.rays.proj4.model;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
+import in.co.rays.proj4.bean.CourseBean;
+import in.co.rays.proj4.bean.SubjectBean;
 import in.co.rays.proj4.bean.TimetableBean;
+import in.co.rays.proj4.exception.ApplicationException;
+import in.co.rays.proj4.exception.DatabaseException;
+import in.co.rays.proj4.exception.DuplicateRecordException;
 import in.co.rays.proj4.util.JDBCDataSource;
 
 public class TimetableModel {
 	
-	public Long addTimetable(TimetableBean bean) throws SQLException {
+	public Long addTimetable(TimetableBean bean) throws ApplicationException,DuplicateRecordException {
 		Connection conn = null;
 		Long pk = 0l;
+		
+		CourseModel courseModel = new CourseModel();
+		CourseBean  courseBean = courseModel.findByPk(bean.getCourseId());
+		bean.setCourseName(courseBean.getName());
+		
+		SubjectModel subModel = new SubjectModel();
+		SubjectBean subBean = subModel.findByPk(bean.getSubjectId());
+		bean.setSubjectName(subBean.getName());
+		
 		try {
 			conn = JDBCDataSource.getConnection();
 			pk = getNextPk();
@@ -38,16 +50,30 @@ public class TimetableModel {
 			conn.commit();
 			pstmt.close();
 		} catch (Exception e) {
-			conn.rollback();
+			try {
+				conn.rollback();
+			} catch (Exception ex) {
+				throw new ApplicationException("Exception : Add rollback exception " + ex.getMessage());
+			}
 			e.printStackTrace();
-		} finally {
+			throw new ApplicationException("Exception : Exception in add Timetable");	
+			} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 		return pk;
 	}
 
-	public void updateTimetable(TimetableBean bean) throws SQLException {
+	public void updateTimetable(TimetableBean bean) throws ApplicationException,DuplicateRecordException{
 		Connection conn = null;
+		
+		CourseModel courseModel = new CourseModel();
+		CourseBean  courseBean = courseModel.findByPk(bean.getCourseId());
+		bean.setCourseName(courseBean.getName());
+		
+		SubjectModel subModel = new SubjectModel();
+		SubjectBean subBean = subModel.findByPk(bean.getSubjectId());
+		bean.setSubjectName(subBean.getName());
+		
 		try {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false);
@@ -71,14 +97,19 @@ public class TimetableModel {
 			conn.commit();
 			pstmt.close();
 		} catch (Exception e) {
-			conn.rollback();
+			try {
+				conn.rollback();
+			} catch (Exception ex) {
+				throw new ApplicationException("Exception : Update rollback exception " + ex.getMessage());
+			}
 			e.printStackTrace();
+			throw new ApplicationException("Exception : Exception in Update TimeTable");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 	}
 
-	public void deleteTimetable(Long id) throws SQLException {
+	public void deleteTimetable(Long id) throws ApplicationException {
 		Connection conn = null;
 		try {
 			conn = JDBCDataSource.getConnection();
@@ -90,14 +121,19 @@ public class TimetableModel {
 			conn.commit();
 			pstmt.close();
 		} catch (Exception e) {
-			conn.rollback();
+			try {
+				conn.rollback();
+			} catch (Exception ex) {
+				throw new ApplicationException("Exception : Delete rollback exception " + ex.getMessage());
+			}
 			e.printStackTrace();
+			throw new ApplicationException("Exception : Exception in Delete Timetable");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 	}
 
-	public TimetableBean findByPk(Long id) throws SQLException {
+	public TimetableBean findByPk(Long id) throws ApplicationException {
 		Connection conn = null;
 		TimetableBean bean = null;
 		StringBuffer sql = new StringBuffer("select * from st_timetable where id = ?");
@@ -125,25 +161,25 @@ public class TimetableModel {
 			pstmt.close();
 			rs.close();
 		} catch (Exception e) {
-			conn.rollback();
 			e.printStackTrace();
+			throw new ApplicationException("Exception : Exception in FindByPk Timetable");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 		return bean;
 	}
 
-	public List<TimetableBean> list() throws SQLException {
+	public List<TimetableBean> list() throws ApplicationException {
 		return search(null, 0, 0);
 	}
 
-	public List<TimetableBean> search(TimetableBean bean, int pageNo, int pageSize) throws SQLException {
+	public List<TimetableBean> search(TimetableBean bean, int pageNo, int pageSize) throws ApplicationException {
 		Connection conn = null;
 		StringBuffer sql = new StringBuffer("select * from st_timetable where 1 = 1");
 		List<TimetableBean> timetableList = new ArrayList<TimetableBean>();
 
 		if (bean != null) {
-			if (bean.getId() > 0) {
+			if (bean.getId()!=null && bean.getId() > 0) {
 				sql.append(" and id = "+bean.getId());
 			}
 			if (bean.getSemester()!= null && bean.getSemester().length() > 0) {
@@ -153,18 +189,18 @@ public class TimetableModel {
 				sql.append(" and description like '" + bean.getDescription() + "%'");
 			}
 			if (bean.getExamDate()!= null) {
-				sql.append(" and exam_date like '" + bean.getExamDate() + "%'");
+				sql.append(" and exam_date like '" + new java.sql.Date(bean.getExamDate().getTime()) + "%'");
 			}
 			if (bean.getExamTime()!= null && bean.getExamTime().length() > 0) {
 				sql.append(" and exam_time like '" + bean.getExamTime() + "%'");
 			}
-			if (bean.getCourseId() > 0) {
+			if (bean.getCourseId()!=null && bean.getCourseId() > 0) {
 				sql.append(" and course_id = " + bean.getCourseId());
 			}
 			if (bean.getCourseName()!= null && bean.getCourseName().length() > 0) {
 				sql.append(" and course_name like '" + bean.getCourseName() + "%'");
 			}
-			if (bean.getSubjectId() > 0) {
+			if (bean.getSubjectId()!=null && bean.getSubjectId() > 0) {
 				sql.append(" and subject_id = " + bean.getSubjectId());
 			}
 			if (bean.getSubjectName()!= null && bean.getSubjectName().length() > 0) {
@@ -202,15 +238,15 @@ public class TimetableModel {
 			pstmt.close();
 			rs.close();
 		} catch (Exception e) {
-			conn.rollback();
 			e.printStackTrace();
+			throw new ApplicationException("Exception : Exception in search Timetable");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 		return timetableList;
 	}
 
-	public Long getNextPk() throws SQLException {
+	public Long getNextPk() throws DatabaseException {
 		Connection conn = null;
 		Long pk = 0l;
 		try {
@@ -223,8 +259,7 @@ public class TimetableModel {
 			pstmt.close();
 			rs.close();
 		} catch (Exception e) {
-			conn.rollback();
-			e.printStackTrace();
+			throw new DatabaseException("Exception in Marksheet getting PK");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}

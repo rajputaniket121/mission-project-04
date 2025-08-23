@@ -1,6 +1,5 @@
 package in.co.rays.proj4.test;
 
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,12 +8,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import in.co.rays.proj4.bean.TimetableBean;
+import in.co.rays.proj4.exception.ApplicationException;
+import in.co.rays.proj4.exception.DuplicateRecordException;
 import in.co.rays.proj4.model.TimetableModel;
 
 public class TestTimetableModel {
 	
-	public static void main(String[] args) throws SQLException {
-		//testAddTimetable();
+	public static void main(String[] args) throws ParseException, ApplicationException, DuplicateRecordException  {
+		testAddTimetable();
 		//testUpdateTimetable();
 		//testDeleteTimetable();
 		//testFindByPk();
@@ -23,7 +24,7 @@ public class TestTimetableModel {
 	}
 	
 	
-	public static void testAddTimetable() throws SQLException, ParseException {
+	public static void testAddTimetable() throws ParseException, ApplicationException, DuplicateRecordException {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		TimetableModel model = new TimetableModel();
 		TimetableBean bean = new TimetableBean();
@@ -32,9 +33,7 @@ public class TestTimetableModel {
 		bean.setExamDate(sdf.parse("12-09-2000"));
 		bean.setExamTime("time");
 		bean.setCourseId(1l);
-		bean.setCourseName("java");
-		bean.setSubjectId(2l);
-		bean.setSubjectName("king");
+		bean.setSubjectId(1l);
 		bean.setCreatedBy("Aniket");
 		bean.setModifiedBy("Aniket");
 		bean.setCreatedDateTime(new Timestamp(new Date().getTime()));
@@ -43,7 +42,7 @@ public class TestTimetableModel {
 		System.out.println("Timetable added with id "+id);
 	}
 	
-	public static void testUpdateTimetable() throws SQLException, ParseException {
+	public static void testUpdateTimetable() throws ParseException, ApplicationException, DuplicateRecordException {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		TimetableModel model = new TimetableModel();
 		TimetableBean bean = new TimetableBean();
@@ -53,9 +52,7 @@ public class TestTimetableModel {
 		bean.setExamDate(sdf.parse("12-09-2000"));
 		bean.setExamTime("time");
 		bean.setCourseId(1l);
-		bean.setCourseName("java");
 		bean.setSubjectId(2l);
-		bean.setSubjectName("king");
 		bean.setCreatedBy("Anurag");
 		bean.setModifiedBy("Aniket");
 		bean.setCreatedDateTime(new Timestamp(new Date().getTime()));
@@ -63,12 +60,12 @@ public class TestTimetableModel {
 		model.updateTimetable(bean);
 	}
 	
-	public static void testDeleteTimetable() throws SQLException {
+	public static void testDeleteTimetable() throws ApplicationException  {
 		TimetableModel model = new TimetableModel();
 		model.deleteTimetable(2l);
 	}
 	
-	public static void testFindByPk() throws SQLException {
+	public static void testFindByPk() throws ApplicationException  {
 		TimetableModel model = new TimetableModel();
 		TimetableBean bean = model.findByPk(1l);
 		System.out.println(bean.getId());
@@ -87,7 +84,7 @@ public class TestTimetableModel {
 		
 	}
 	
-	public static void testSearch() throws SQLException {
+	public static void testSearch() throws ApplicationException  {
 		TimetableModel model = new TimetableModel();
 		List<TimetableBean> list = model.search(null, 1, 5);
 		Iterator<TimetableBean> it = list.iterator();
@@ -110,7 +107,7 @@ public class TestTimetableModel {
 		}
 	}
 	
-	public static void testList() throws SQLException {
+	public static void testList() throws ApplicationException  {
 		TimetableModel model = new TimetableModel();
 		List<TimetableBean> list = model.list();
 		Iterator<TimetableBean> it = list.iterator();

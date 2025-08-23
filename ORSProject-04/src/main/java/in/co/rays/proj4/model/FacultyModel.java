@@ -3,22 +3,40 @@ package in.co.rays.proj4.model;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
+import in.co.rays.proj4.bean.CollegeBean;
+import in.co.rays.proj4.bean.CourseBean;
 import in.co.rays.proj4.bean.FacultyBean;
+import in.co.rays.proj4.bean.SubjectBean;
+import in.co.rays.proj4.exception.ApplicationException;
+import in.co.rays.proj4.exception.DatabaseException;
+import in.co.rays.proj4.exception.DuplicateRecordException;
 import in.co.rays.proj4.util.JDBCDataSource;
 
 public class FacultyModel {
 
-	public Long addFaculty(FacultyBean bean) throws SQLException {
+	public Long addFaculty(FacultyBean bean) throws ApplicationException,DuplicateRecordException{
 		Connection conn = null;
 		Long pk = 0l;
+		
 		FacultyBean exist = findByEmail(bean.getEmail());
 		if(exist!=null) {
 			throw new RuntimeException("Email Id already Exist");
 		}
+		
+		CollegeModel clgModel = new CollegeModel();
+		CollegeBean clgBean =	clgModel.findByPk(bean.getCollegeId());
+		bean.setCollegeName(clgBean.getName());
+		
+		CourseModel courseModel = new CourseModel();
+		CourseBean  courseBean = courseModel.findByPk(bean.getCourseId());
+		bean.setCourseName(courseBean.getName());
+		
+		SubjectModel subModel = new SubjectModel();
+		SubjectBean subBean = subModel.findByPk(bean.getSubjectId());
+		bean.setSubjectName(subBean.getName());
+		
 		try {
 			conn = JDBCDataSource.getConnection();
 			pk = getNextPk();
@@ -46,20 +64,38 @@ public class FacultyModel {
 			conn.commit();
 			pstmt.close();
 		} catch (Exception e) {
-			conn.rollback();
+			try {
+				conn.rollback();
+			} catch (Exception ex) {
+				throw new ApplicationException("Exception : Add rollback exception " + ex.getMessage());
+			}
 			e.printStackTrace();
+			throw new ApplicationException("Exception : Exception in add Faculty");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 		return pk;
 	}
 
-	public void updateFaculty(FacultyBean bean) throws SQLException {
+	public void updateFaculty(FacultyBean bean) throws ApplicationException,DuplicateRecordException {
 		Connection conn = null;
 		FacultyBean exist = findByEmail(bean.getEmail());
 		if(exist!=null && exist.getId() != bean.getId()) {
 			throw new RuntimeException("Email Id already Exist");
 		}
+		
+		CollegeModel clgModel = new CollegeModel();
+		CollegeBean clgBean =	clgModel.findByPk(bean.getCollegeId());
+		bean.setCollegeName(clgBean.getName());
+		
+		CourseModel courseModel = new CourseModel();
+		CourseBean  courseBean = courseModel.findByPk(bean.getCourseId());
+		bean.setCourseName(courseBean.getName());
+		
+		SubjectModel subModel = new SubjectModel();
+		SubjectBean subBean = subModel.findByPk(bean.getSubjectId());
+		bean.setSubjectName(subBean.getName());
+		
 		try {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false);
@@ -87,14 +123,19 @@ public class FacultyModel {
 			conn.commit();
 			pstmt.close();
 		} catch (Exception e) {
-			conn.rollback();
+			try {
+				conn.rollback();
+			} catch (Exception ex) {
+				throw new ApplicationException("Exception : Add rollback exception " + ex.getMessage());
+			}
 			e.printStackTrace();
+			throw new ApplicationException("Exception : Exception in Update Faculty");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 	}
 
-	public void deleteFaculty(Long id) throws SQLException {
+	public void deleteFaculty(Long id) throws ApplicationException {
 		Connection conn = null;
 		try {
 			conn = JDBCDataSource.getConnection();
@@ -106,14 +147,19 @@ public class FacultyModel {
 			conn.commit();
 			pstmt.close();
 		} catch (Exception e) {
-			conn.rollback();
+			try {
+				conn.rollback();
+			} catch (Exception ex) {
+				throw new ApplicationException("Exception : Delete rollback exception " + ex.getMessage());
+			}
 			e.printStackTrace();
+			throw new ApplicationException("Exception : Exception in Delete Marksheet");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 	}
 
-	public FacultyBean findByPk(Long id) throws SQLException {
+	public FacultyBean findByPk(Long id) throws ApplicationException {
 		Connection conn = null;
 		FacultyBean bean = null;
 		StringBuffer sql = new StringBuffer("select * from st_faculty where id = ?");
@@ -145,15 +191,15 @@ public class FacultyModel {
 			pstmt.close();
 			rs.close();
 		} catch (Exception e) {
-			conn.rollback();
 			e.printStackTrace();
+			throw new ApplicationException("Exception : Exception in FindByPk Faculty");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 		return bean;
 	}
 	
-	public FacultyBean findByEmail(String email) throws SQLException {
+	public FacultyBean findByEmail(String email) throws ApplicationException {
 		Connection conn = null;
 		FacultyBean bean = null;
 		StringBuffer sql = new StringBuffer("select * from st_faculty where email = ?");
@@ -185,25 +231,25 @@ public class FacultyModel {
 			pstmt.close();
 			rs.close();
 		} catch (Exception e) {
-			conn.rollback();
 			e.printStackTrace();
+			throw new ApplicationException("Exception : Exception in FindByEmail Faculty");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 		return bean;
 	}
 
-	public List<FacultyBean> list() throws SQLException {
+	public List<FacultyBean> list() throws ApplicationException {
 		return search(null, 0, 0);
 	}
 
-	public List<FacultyBean> search(FacultyBean bean, int pageNo, int pageSize) throws SQLException {
+	public List<FacultyBean> search(FacultyBean bean, int pageNo, int pageSize) throws ApplicationException {
 		Connection conn = null;
 		StringBuffer sql = new StringBuffer("select * from st_faculty where 1 = 1");
 		List<FacultyBean> timetableList = new ArrayList<FacultyBean>();
 
 		if (bean != null) {
-			if (bean.getId() > 0) {
+			if (bean.getId()!=null && bean.getId() > 0) {
 				sql.append(" and id = "+bean.getId());
 			}
 			if (bean.getFirstName()!= null && bean.getFirstName().length() > 0) {
@@ -213,7 +259,7 @@ public class FacultyModel {
 				sql.append(" and last_name like '" + bean.getLastName() + "%'");
 			}
 			if (bean.getDob()!= null) {
-				sql.append(" and dob like '" + bean.getDob() + "%'");
+				sql.append(" and dob like '" + new java.sql.Date(bean.getDob().getTime()) + "%'");
 			}
 			if (bean.getGender()!= null && bean.getGender().length() > 0) {
 				sql.append(" and gender like '" + bean.getGender() + "%'");
@@ -224,19 +270,19 @@ public class FacultyModel {
 			if (bean.getEmail()!= null && bean.getEmail().length() > 0) {
 				sql.append(" and email like '" + bean.getEmail() + "%'");
 			}
-			if (bean.getCollegeId() > 0) {
+			if (bean.getCollegeId()!=null && bean.getCollegeId() > 0) {
 				sql.append(" and college_id = " + bean.getCollegeId());
 			}
 			if (bean.getCollegeName()!= null && bean.getCollegeName().length() > 0) {
 				sql.append(" and college_name like '" + bean.getCollegeName() + "%'");
 			}
-			if (bean.getCourseId() > 0) {
+			if (bean.getCollegeId()!=null && bean.getCourseId() > 0) {
 				sql.append(" and course_id = " + bean.getCourseId());
 			}
 			if (bean.getCourseName()!= null && bean.getCourseName().length() > 0) {
 				sql.append(" and course_name like '" + bean.getCourseName() + "%'");
 			}
-			if (bean.getSubjectId() > 0) {
+			if (bean.getSubjectId()!=null && bean.getSubjectId() > 0) {
 				sql.append(" and subject_id = " + bean.getSubjectId());
 			}
 			if (bean.getSubjectName()!= null && bean.getSubjectName().length() > 0) {
@@ -278,15 +324,15 @@ public class FacultyModel {
 			pstmt.close();
 			rs.close();
 		} catch (Exception e) {
-			conn.rollback();
 			e.printStackTrace();
+			throw new ApplicationException("Exception : Exception in search Faculty");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 		return timetableList;
 	}
 
-	public Long getNextPk() throws SQLException {
+	public Long getNextPk() throws DatabaseException {
 		Connection conn = null;
 		Long pk = 0l;
 		try {
@@ -299,8 +345,7 @@ public class FacultyModel {
 			pstmt.close();
 			rs.close();
 		} catch (Exception e) {
-			conn.rollback();
-			e.printStackTrace();
+			throw new DatabaseException("Exception in Marksheet getting PK");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}

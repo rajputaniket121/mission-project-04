@@ -1,6 +1,5 @@
 package in.co.rays.proj4.test;
 
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,13 +15,13 @@ import in.co.rays.proj4.model.UserModel;
 public class TestUserModel {
 	
 	public static void main(String[] args) throws ParseException, ApplicationException, DuplicateRecordException {
-	//	testAddUser();
+//		testAddUser();
 //		testUpdateUser();
 //		testDeleteUser();
 //		testFindByPk();
 //		testFindByLogin();
-		testSearch();
-	//	testList();
+//		testSearch();
+//		testList();
 	}
 	
 	

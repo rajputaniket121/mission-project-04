@@ -214,7 +214,7 @@ public class StudentModel {
 		List<StudentBean> studentList = new ArrayList<StudentBean>();
 
 		if (bean != null) {
-			if (bean.getId() > 0) {
+			if (bean.getId()!= null && bean.getId() > 0) {
 				sql.append(" and id = "+bean.getId());
 			}
 			if (bean.getFirstName()!= null && bean.getFirstName().length() > 0) {
@@ -224,7 +224,7 @@ public class StudentModel {
 				sql.append(" and last_name like '" + bean.getLastName() + "%'");
 			}
 			if (bean.getDob()!= null) {
-				sql.append(" and dob like '" + bean.getDob() + "%'");
+				sql.append(" and dob like '" + new java.sql.Date(bean.getDob().getTime()) + "%'");
 			}
 			if (bean.getGender()!= null && bean.getGender().length() > 0) {
 				sql.append(" and gender like '" + bean.getGender() + "%'");

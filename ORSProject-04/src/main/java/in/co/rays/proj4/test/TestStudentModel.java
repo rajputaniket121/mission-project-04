@@ -1,6 +1,5 @@
 package in.co.rays.proj4.test;
 
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,22 +8,24 @@ import java.util.Iterator;
 import java.util.List;
 
 import in.co.rays.proj4.bean.StudentBean;
+import in.co.rays.proj4.exception.ApplicationException;
+import in.co.rays.proj4.exception.DuplicateRecordException;
 import in.co.rays.proj4.model.StudentModel;
 
 public class TestStudentModel {
 	
-	public static void main(String[] args) throws SQLException, ParseException {
+	public static void main(String[] args) throws ParseException, ApplicationException, DuplicateRecordException {
 //		testAddStudent();
 //		testUpdateStudent();
 //		testDeleteStudent();
 //		testFindByPk();
 //		testFindByEmail();
 //		testSearch();
-//		testList();
+		//testList();
 	}
 	
 	
-	public static void testAddStudent() throws SQLException, ParseException {
+	public static void testAddStudent() throws ParseException, ApplicationException, DuplicateRecordException {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		StudentModel model = new StudentModel();
 		StudentBean bean = new StudentBean();
@@ -35,7 +36,6 @@ public class TestStudentModel {
 		bean.setMobileNo("7898037387");
 		bean.setEmail("aniket@gmail.com");
 		bean.setCollegeId(1l);;
-		bean.setCollegeName("SDBCt");
 		bean.setCreatedBy("Aniket");
 		bean.setModifiedBy("Aniket");
 		bean.setCreatedDateTime(new Timestamp(new Date().getTime()));
@@ -44,7 +44,7 @@ public class TestStudentModel {
 		System.out.println("Student added with id "+id);
 	}
 	
-	public static void testUpdateStudent() throws SQLException, ParseException {
+	public static void testUpdateStudent() throws  ParseException, ApplicationException, DuplicateRecordException {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		StudentModel model = new StudentModel();
 		StudentBean bean = new StudentBean();
@@ -55,8 +55,7 @@ public class TestStudentModel {
 		bean.setGender("Male");
 		bean.setMobileNo("7898037387");
 		bean.setEmail("aniket@gmail.com");
-		bean.setCollegeId(1l);;
-		bean.setCollegeName("SDBCt");
+		bean.setCollegeId(2l);;
 		bean.setCreatedBy("Aniket");
 		bean.setModifiedBy("Aniket");
 		bean.setCreatedDateTime(new Timestamp(new Date().getTime()));
@@ -64,12 +63,12 @@ public class TestStudentModel {
 		model.updateStudent(bean);
 	}
 	
-	public static void testDeleteStudent() throws SQLException {
+	public static void testDeleteStudent() throws ApplicationException {
 		StudentModel model = new StudentModel();
 		model.deleteStudent(2l);
 	}
 	
-	public static void testFindByPk() throws SQLException {
+	public static void testFindByPk() throws  ApplicationException {
 		StudentModel model = new StudentModel();
 		StudentBean bean = model.findByPk(1l);
 		System.out.println(bean.getId());
@@ -87,7 +86,7 @@ public class TestStudentModel {
 		System.out.println(bean.getModifiedDateTime());
 	}
 	
-	public static void testFindByEmail() throws SQLException {
+	public static void testFindByEmail() throws ApplicationException {
 		StudentModel model = new StudentModel();
 		StudentBean bean = model.findByEmail("aniket@gmail.com");
 		System.out.println(bean.getId());
@@ -106,7 +105,7 @@ public class TestStudentModel {
 		
 	}
 	
-	public static void testSearch() throws SQLException {
+	public static void testSearch() throws ApplicationException {
 		StudentModel model = new StudentModel();
 		List<StudentBean> list = model.search(null, 1, 5);
 		Iterator<StudentBean> it = list.iterator();
@@ -129,7 +128,7 @@ public class TestStudentModel {
 		}
 	}
 	
-	public static void testList() throws SQLException {
+	public static void testList() throws ApplicationException {
 		StudentModel model = new StudentModel();
 		List<StudentBean> list = model.list();
 		Iterator<StudentBean> it = list.iterator();

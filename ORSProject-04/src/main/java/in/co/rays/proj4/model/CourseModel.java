@@ -3,21 +3,23 @@ package in.co.rays.proj4.model;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import in.co.rays.proj4.bean.CourseBean;
+import in.co.rays.proj4.exception.ApplicationException;
+import in.co.rays.proj4.exception.DatabaseException;
+import in.co.rays.proj4.exception.DuplicateRecordException;
 import in.co.rays.proj4.util.JDBCDataSource;
 
 public class CourseModel {
 	
-	public Long addCourse(CourseBean bean) throws SQLException {
+	public Long addCourse(CourseBean bean) throws ApplicationException,DuplicateRecordException {
 		Connection conn = null;
 		Long pk = 0l;
 		CourseBean exist = findByName(bean.getName());
 		if(exist!=null) {
-			throw new RuntimeException("Course already Exist");
+			throw new DuplicateRecordException("Course already Exist");
 		}
 		try {
 			conn = JDBCDataSource.getConnection();
@@ -37,19 +39,24 @@ public class CourseModel {
 			conn.commit();
 			pstmt.close();
 		} catch (Exception e) {
-			conn.rollback();
+			try {
+				conn.rollback();
+			} catch (Exception ex) {
+				throw new ApplicationException("Exception : Add rollback exception " + ex.getMessage());
+			}
 			e.printStackTrace();
+			throw new ApplicationException("Exception : Exception in add Course");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 		return pk;
 	}
 
-	public void updateCourse(CourseBean bean) throws SQLException {
+	public void updateCourse(CourseBean bean) throws ApplicationException,DuplicateRecordException{
 		Connection conn = null;
 		CourseBean exist = findByName(bean.getName());
 		if(exist!=null && exist.getId() != bean.getId()) {
-			throw new RuntimeException("Course already Exist");
+			throw new DuplicateRecordException("Course already Exist");
 		}
 		try {
 			conn = JDBCDataSource.getConnection();
@@ -69,14 +76,19 @@ public class CourseModel {
 			conn.commit();
 			pstmt.close();
 		} catch (Exception e) {
-			conn.rollback();
+			try {
+				conn.rollback();
+			} catch (Exception ex) {
+				throw new ApplicationException("Exception : Update rollback exception " + ex.getMessage());
+			}
 			e.printStackTrace();
+			throw new ApplicationException("Exception : Exception in Update Course");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 	}
 
-	public void deleteCourse(Long id) throws SQLException {
+	public void deleteCourse(Long id) throws ApplicationException {
 		Connection conn = null;
 		try {
 			conn = JDBCDataSource.getConnection();
@@ -88,14 +100,19 @@ public class CourseModel {
 			conn.commit();
 			pstmt.close();
 		} catch (Exception e) {
-			conn.rollback();
+			try {
+				conn.rollback();
+			} catch (Exception ex) {
+				throw new ApplicationException("Exception : Delete rollback exception " + ex.getMessage());
+			}
 			e.printStackTrace();
+			throw new ApplicationException("Exception : Exception in delete Course");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 	}
 
-	public CourseBean findByPk(Long id) throws SQLException {
+	public CourseBean findByPk(Long id) throws ApplicationException {
 		Connection conn = null;
 		CourseBean bean = null;
 		StringBuffer sql = new StringBuffer("select * from st_course where id = ?");
@@ -118,15 +135,15 @@ public class CourseModel {
 			pstmt.close();
 			rs.close();
 		} catch (Exception e) {
-			conn.rollback();
 			e.printStackTrace();
+			throw new ApplicationException("Exception : Exception in FindByPk Course");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 		return bean;
 	}
 
-	public CourseBean findByName(String name) throws SQLException {
+	public CourseBean findByName(String name) throws ApplicationException {
 		Connection conn = null;
 		CourseBean bean = null;
 		StringBuffer sql = new StringBuffer("select * from st_course where name = ?");
@@ -149,25 +166,25 @@ public class CourseModel {
 			pstmt.close();
 			rs.close();
 		} catch (Exception e) {
-			conn.rollback();
 			e.printStackTrace();
+			throw new ApplicationException("Exception : Exception in findByName Course");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 		return bean;
 	}
 
-	public List<CourseBean> list() throws SQLException {
+	public List<CourseBean> list() throws ApplicationException {
 		return search(null, 0, 0);
 	}
 
-	public List<CourseBean> search(CourseBean bean, int pageNo, int pageSize) throws SQLException {
+	public List<CourseBean> search(CourseBean bean, int pageNo, int pageSize) throws ApplicationException {
 		Connection conn = null;
 		StringBuffer sql = new StringBuffer("select * from st_course where 1 = 1");
 		List<CourseBean> courseList = new ArrayList<CourseBean>();
 
 		if (bean != null) {
-			if (bean.getId() > 0) {
+			if (bean.getId() != null  && bean.getId() > 0) {
 				sql.append(" and id = "+bean.getId());
 			}
 			if (bean.getName()!= null && bean.getName().length() > 0) {
@@ -206,15 +223,15 @@ public class CourseModel {
 			pstmt.close();
 			rs.close();
 		} catch (Exception e) {
-			conn.rollback();
 			e.printStackTrace();
+			throw new ApplicationException("Exception : Exception in search Course");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 		return courseList;
 	}
 
-	public Long getNextPk() throws SQLException {
+	public Long getNextPk() throws DatabaseException {
 		Connection conn = null;
 		Long pk = 0l;
 		try {
@@ -222,17 +239,16 @@ public class CourseModel {
 			PreparedStatement pstmt = conn.prepareStatement("select max(id) from st_course");
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				pk = rs.getLong(1) + 1l;
+				pk = rs.getLong(1);
 			}
 			pstmt.close();
 			rs.close();
 		} catch (Exception e) {
-			conn.rollback();
-			e.printStackTrace();
+			throw new DatabaseException("Exception : Exception In Getting pk");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
-		return pk;
+		return pk + 1l;
 	}
 
 }

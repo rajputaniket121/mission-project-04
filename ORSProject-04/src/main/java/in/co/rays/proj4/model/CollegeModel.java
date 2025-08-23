@@ -175,7 +175,7 @@ public class CollegeModel {
 			rs.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ApplicationException("Exception : Exception in FindByPk College");
+			throw new ApplicationException("Exception : Exception in FindByName College");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
@@ -192,7 +192,7 @@ public class CollegeModel {
 		List<CollegeBean> collegeList = new ArrayList<CollegeBean>();
 
 		if (bean != null) {
-			if (bean.getId() > 0) {
+			if (bean.getId() != null && bean.getId() > 0) {
 				sql.append(" and id = "+bean.getId());
 			}
 			if (bean.getName()!= null && bean.getName().length() > 0) {
@@ -255,7 +255,7 @@ public class CollegeModel {
 			PreparedStatement pstmt = conn.prepareStatement("select max(id) from st_college");
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				pk = rs.getLong(1) + 1l;
+				pk = rs.getLong(1);
 			}
 			pstmt.close();
 			rs.close();
@@ -264,7 +264,7 @@ public class CollegeModel {
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
-		return pk;
+		return pk +1l;
 	}
 
 }
