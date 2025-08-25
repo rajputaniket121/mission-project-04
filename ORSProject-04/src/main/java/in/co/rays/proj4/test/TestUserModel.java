@@ -29,9 +29,9 @@ public class TestUserModel {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		UserModel model = new UserModel();
 		UserBean bean = new UserBean();
-		bean.setFirstName("Ajay");
-		bean.setLastName("kerketta");
-		bean.setLogin("ajay@gmail.com");
+		bean.setFirstName("Akshat");
+		bean.setLastName("saxsena");
+		bean.setLogin("akshat@gmail.com");
 		bean.setPassword("123");
 		bean.setDob(sdf.parse("12-02-2000"));
 		bean.setMobileNo("7898037387");
