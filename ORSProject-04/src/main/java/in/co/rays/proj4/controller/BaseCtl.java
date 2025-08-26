@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import in.co.rays.proj4.bean.BaseBean;
+import in.co.rays.proj4.bean.UserBean;
 import in.co.rays.proj4.util.DataUtility;
 import in.co.rays.proj4.util.DataValidator;
 import in.co.rays.proj4.util.ServletUtility;
@@ -44,38 +45,38 @@ public abstract class BaseCtl extends HttpServlet {
 		return null;
 	}
 
-//	protected BaseBean populateDTO(BaseBean dto, HttpServletRequest request) {
-//
-//		String createdBy = request.getParameter("createdBy");
-//		String modifiedBy = null;
-//
-//		UserBean userbean = (UserBean) request.getSession().getAttribute("user");
-//
-//		if (userbean == null) {
-//			createdBy = "root";
-//			modifiedBy = "root";
-//		} else {
-//			modifiedBy = userbean.getLogin();
-//			if ("null".equalsIgnoreCase(createdBy) || DataValidator.isNull(createdBy)) {
-//				createdBy = modifiedBy;
-//			}
-//		}
-//
-//		dto.setCreatedBy(createdBy);
-//		dto.setModifiedBy(modifiedBy);
-//
-//		long cdt = DataUtility.getLong(request.getParameter("createdDatetime"));
-//
-//		if (cdt > 0) {
-//			dto.setCreatedDatetime(DataUtility.getTimestamp(cdt));
-//		} else {
-//			dto.setCreatedDatetime(DataUtility.getCurrentTimestamp());
-//		}
-//
-//		dto.setModifiedDatetime(DataUtility.getCurrentTimestamp());
-//
-//		return dto;
-//	}
+	protected BaseBean populateDTO(BaseBean dto, HttpServletRequest request) {
+
+		String createdBy = request.getParameter("createdBy");
+		String modifiedBy = null;
+
+		UserBean userbean = (UserBean) request.getSession().getAttribute("user");
+
+		if (userbean == null) {
+			createdBy = "root";
+			modifiedBy = "root";
+		} else {
+			modifiedBy = userbean.getLogin();
+			if ("null".equalsIgnoreCase(createdBy) || DataValidator.isNull(createdBy)) {
+				createdBy = modifiedBy;
+			}
+		}
+
+		dto.setCreatedBy(createdBy);
+		dto.setModifiedBy(modifiedBy);
+
+		long cdt = DataUtility.getLong(request.getParameter("createdDatetime"));
+
+		if (cdt > 0) {
+			dto.setCreatedDateTime(DataUtility.getTimestamp(cdt));;
+		} else {
+			dto.setCreatedDateTime(DataUtility.getCurrentTimestamp());
+		}
+
+		dto.setModifiedDateTime(DataUtility.getCurrentTimestamp());
+
+		return dto;
+	}
 
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response)

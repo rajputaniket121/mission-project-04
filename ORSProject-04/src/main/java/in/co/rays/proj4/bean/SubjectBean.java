@@ -38,6 +38,16 @@ public class SubjectBean extends BaseBean{
 		return "SubjectBean [name=" + name + ", courseId=" + courseId + ", courseName=" + courseName + ", description="
 				+ description + "]";
 	}
+	@Override
+	public String getKey() {
+		// TODO Auto-generated method stub
+		return id+"";
+	}
+	@Override
+	public String getValue() {
+		// TODO Auto-generated method stub
+		return name;
+	}
 	
 	
 

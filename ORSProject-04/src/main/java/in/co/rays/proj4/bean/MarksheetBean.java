@@ -52,6 +52,16 @@ public class MarksheetBean extends BaseBean {
 		return "MarksheetBean [rollNo=" + rollNo + ", studentId=" + studentId + ", name=" + name + ", physics="
 				+ physics + ", chemistry=" + chemistry + ", maths=" + maths + "]";
 	}
+	@Override
+	public String getKey() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public String getValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 	

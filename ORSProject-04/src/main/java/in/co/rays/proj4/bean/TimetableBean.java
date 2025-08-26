@@ -67,6 +67,16 @@ public class TimetableBean extends BaseBean {
 				+ ", examTime=" + examTime + ", courseId=" + courseId + ", courseName=" + courseName + ", subjectId="
 				+ subjectId + ", subjectName=" + subjectName + "]";
 	}
+	@Override
+	public String getKey() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public String getValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	
 	

@@ -43,6 +43,16 @@ public class CollegeBean extends BaseBean{
 		return "CollegeBean [name=" + name + ", address=" + address + ", state=" + state + ", city=" + city
 				+ ", phoneNo=" + phoneNo + "]";
 	}
+	@Override
+	public String getKey() {
+		// TODO Auto-generated method stub
+		return id+"";
+	}
+	@Override
+	public String getValue() {
+		// TODO Auto-generated method stub
+		return name;
+	}
 	
 	
 
