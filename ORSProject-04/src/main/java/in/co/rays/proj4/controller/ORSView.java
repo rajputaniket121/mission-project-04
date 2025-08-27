@@ -1,6 +1,19 @@
 package in.co.rays.proj4.controller;
 
 public interface ORSView {
+	
+	
+	/*		Variables
+	 * 
+	 * UseCase :
+	 * 
+	 *  1. created constants variables and map tham to right view or controller
+	 *  
+	 *  Advantage : 
+	 *  
+	 *  1. this ways removes the chances of Spelling mistakes.
+	 *  2. Make changes on one place effect everywhere.
+	 * */
 
 	public String APP_CONTEXT = "/ORSProject-04";
 
