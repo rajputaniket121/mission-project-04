@@ -6,19 +6,19 @@ public class PropertyReader {
 
 	private static ResourceBundle rb = ResourceBundle.getBundle("in.co.rays.proj4.bundle.system");
 
-	public static String getValue(String key) {
+	public static String getValue(String key) { // key = error.require
 
 		String val = null;
 
 		try {
-			val = rb.getString(key); // {0} is required
+			val = rb.getString(key); //value =  {0} is required
 		} catch (Exception e) {
 			val = key;
 		}
 		return val;
 	}
 
-	public static String getValue(String key, String param) {
+	public static String getValue(String key, String param) {   // key = error.require value ="First Name"
 		String msg = getValue(key); // {0} is required
 		msg = msg.replace("{0}", param);
 		return msg;

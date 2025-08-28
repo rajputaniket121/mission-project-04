@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Set;
 
 import in.co.rays.proj4.bean.DropdownListBean;
-import in.co.rays.proj4.model.RoleModel;
 import in.co.rays.proj4.model.UserModel;
 
 public class HTMLUtility {

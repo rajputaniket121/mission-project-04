@@ -25,9 +25,9 @@ public class ServletUtility {
 		response.sendRedirect(page);
 	}
 
-	public static String getErrorMessage(String property, HttpServletRequest request) {
+	public static String getErrorMessage(String key, HttpServletRequest request) {  //Used for Form errors
 
-		String val = (String) request.getAttribute(property);
+		String val = (String) request.getAttribute(key);
 		if (val == null) {
 			return "";
 		} else {
@@ -35,8 +35,8 @@ public class ServletUtility {
 		}
 	}
 
-	public static String getMessage(String property, HttpServletRequest request) {
-		String val = (String) request.getAttribute(property);
+	public static String getMessage(String key, HttpServletRequest request) {
+		String val = (String) request.getAttribute(key);
 		if (val == null) {
 			return "";
 		} else {
@@ -44,11 +44,11 @@ public class ServletUtility {
 		}
 	}
 
-	public static void setErrorMessage(String msg, HttpServletRequest request) {
+	public static void setErrorMessage(String msg, HttpServletRequest request) {   //Used to set business errors
 		request.setAttribute(BaseCtl.MSG_ERROR, msg);
 	}
 
-	public static String getErrorMessage(HttpServletRequest request) {
+	public static String getErrorMessage(HttpServletRequest request) {  //Used to get business errors
 		String val = (String) request.getAttribute(BaseCtl.MSG_ERROR);
 		if (val == null) {
 			return "";
@@ -57,11 +57,11 @@ public class ServletUtility {
 		}
 	}
 
-	public static void setSuccessMessage(String msg, HttpServletRequest request) {
+	public static void setSuccessMessage(String msg, HttpServletRequest request) { //Used to set business success
 		request.setAttribute(BaseCtl.MSG_SUCCESS, msg);
 	}
 
-	public static String getSuccessMessage(HttpServletRequest request) {
+	public static String getSuccessMessage(HttpServletRequest request) {  // Used to get business success
 		String val = (String) request.getAttribute(BaseCtl.MSG_SUCCESS);
 		if (val == null) {
 			return "";
