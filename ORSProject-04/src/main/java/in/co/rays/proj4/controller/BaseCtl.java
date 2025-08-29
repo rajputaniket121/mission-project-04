@@ -134,7 +134,7 @@ public abstract class BaseCtl extends HttpServlet {
 		dto.setCreatedBy(createdBy);
 		dto.setModifiedBy(modifiedBy);
 
-		long cdt = DataUtility.getLong(request.getParameter("createdDatetime"));
+		long cdt = DataUtility.getLong(request.getParameter("createdDateTime"));
 
 		if (cdt > 0) {
 			dto.setCreatedDateTime(DataUtility.getTimestamp(cdt));;

@@ -22,6 +22,7 @@ public class TestUserModel {
 //		testFindByLogin();
 //		testSearch();
 //		testList();
+		testAuthenticate();
 	}
 	
 	
@@ -92,6 +93,25 @@ public class TestUserModel {
 	public static void testFindByLogin() throws ApplicationException {
 		UserModel model = new UserModel();
 		UserBean bean = model.findByLogin("aniket@gmail.com");
+		System.out.println(bean.getId());
+		System.out.println(bean.getFirstName());
+		System.out.println(bean.getLastName());
+		System.out.println(bean.getLogin());
+		System.out.println(bean.getPassword());
+		System.out.println(bean.getDob());
+		System.out.println(bean.getMobileNo());
+		System.out.println(bean.getRoleId());
+		System.out.println(bean.getGender());
+		System.out.println(bean.getCreatedBy());
+		System.out.println(bean.getModifiedBy());
+		System.out.println(bean.getCreatedDateTime());
+		System.out.println(bean.getModifiedDateTime());
+		
+	}
+	
+	public static void testAuthenticate() throws ApplicationException {
+		UserModel model = new UserModel();
+		UserBean bean = model.authenticate("aniket@gmail.com","123");
 		System.out.println(bean.getId());
 		System.out.println(bean.getFirstName());
 		System.out.println(bean.getLastName());

@@ -75,7 +75,7 @@
 	<b>|</b>
 	<a href="doc/index.html" target="blank"><b>Java Doc</b></a>
 	<b>|</b>
-	<%-- <a href="LoginCtl?operation=<%=LoginCtl.OP_LOG_OUT%>"><b>Logout</b></a> --%>
+	<a href="LoginCtl?operation=<%=LoginCtl.OP_LOG_OUT%>"><b>Logout</b></a>
 	<%
 		} else {
 	%>

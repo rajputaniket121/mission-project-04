@@ -1,6 +1,11 @@
 package in.co.rays.proj4.bean;
 
 public class RoleBean extends BaseBean{
+	
+	public static final Long ADMIN = 1l;
+	public static final Long STUDENT = 2l;
+	public static final Long USER = 3l;
+	
 	private String name;
 	private String description;
 	public String getName() {

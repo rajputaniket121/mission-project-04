@@ -197,12 +197,12 @@ public class UserModel {
 	public UserBean authenticate(String login,String password) throws ApplicationException {
 		Connection conn = null;
 		UserBean bean = null;
-		StringBuffer sql = new StringBuffer("select * from st_user where login = ?,password = ?");
+		StringBuffer sql = new StringBuffer("select * from st_user where login = ? and password = ?");
 		try {
 			conn = JDBCDataSource.getConnection();
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
 			pstmt.setString(1, login);
-			pstmt.setString(1, password);
+			pstmt.setString(2, password);
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				bean = new UserBean();

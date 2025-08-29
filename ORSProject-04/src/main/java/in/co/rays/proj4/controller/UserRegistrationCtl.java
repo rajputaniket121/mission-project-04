@@ -8,7 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import in.co.rays.proj4.bean.BaseBean;
+import in.co.rays.proj4.bean.RoleBean;
 import in.co.rays.proj4.bean.UserBean;
+import in.co.rays.proj4.exception.ApplicationException;
+import in.co.rays.proj4.exception.DuplicateRecordException;
+import in.co.rays.proj4.model.UserModel;
 import in.co.rays.proj4.util.DataUtility;
 import in.co.rays.proj4.util.DataValidator;
 import in.co.rays.proj4.util.PropertyReader;
@@ -20,7 +24,6 @@ public class UserRegistrationCtl extends BaseCtl {
 
 	@Override
 	protected boolean validate(HttpServletRequest request) {
-		// TODO Auto-generated method stub
 		boolean pass = true;
 
 		if(DataValidator.isNull(request.getParameter("firstName"))) {
@@ -95,7 +98,6 @@ public class UserRegistrationCtl extends BaseCtl {
 	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
 		UserBean bean = new UserBean();
-		
 		bean.setFirstName(DataUtility.getString(request.getParameter("firstName")));
 		bean.setLastName(DataUtility.getString(request.getParameter("lastName")));
 		bean.setLogin(DataUtility.getString(request.getParameter("login")));
@@ -104,7 +106,8 @@ public class UserRegistrationCtl extends BaseCtl {
 		bean.setGender(DataUtility.getString(request.getParameter("gender")));
 		bean.setDob(DataUtility.getDate(request.getParameter("dob")));
 		bean.setMobileNo(DataUtility.getString(request.getParameter("mobileNo")));
-		
+		bean.setRoleId(RoleBean.STUDENT);
+		populateDTO(bean, request);
 		return bean;
 	}
 
@@ -115,9 +118,26 @@ public class UserRegistrationCtl extends BaseCtl {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
 		String op = DataUtility.getString(req.getParameter("operation"));
-		ServletUtility.forward(getView(), req, resp);
+		if(OP_SIGN_UP.equalsIgnoreCase(op)) {
+			UserBean bean = (UserBean) populateBean(req);
+			try {
+				UserModel model = new UserModel();
+				model.addUser(bean);
+				ServletUtility.setBean(bean, req);
+				ServletUtility.setSuccessMessage("User Registration SuccessFully !!!", req);
+			}catch(DuplicateRecordException dre) {
+				ServletUtility.setBean(bean, req);
+				ServletUtility.setErrorMessage("Login Id Already Exist !!!", req);
+			}catch(ApplicationException ae) {
+				ae.printStackTrace();
+				ServletUtility.handleException(ae, req, resp);
+			}
+			ServletUtility.forward(getView(), req, resp);
+		}else if(OP_RESET.equalsIgnoreCase(op)) {
+			ServletUtility.redirect(getView(), req, resp);
+			return;
+		}
 	}
 
 	@Override

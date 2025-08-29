@@ -6,9 +6,14 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import in.co.rays.proj4.bean.BaseBean;
+import in.co.rays.proj4.bean.RoleBean;
 import in.co.rays.proj4.bean.UserBean;
+import in.co.rays.proj4.exception.ApplicationException;
+import in.co.rays.proj4.model.RoleModel;
+import in.co.rays.proj4.model.UserModel;
 import in.co.rays.proj4.util.DataUtility;
 import in.co.rays.proj4.util.DataValidator;
 import in.co.rays.proj4.util.PropertyReader;
@@ -23,7 +28,6 @@ public class LoginCtl extends BaseCtl{
 	
 	@Override
 	protected boolean validate(HttpServletRequest request) {
-		// TODO Auto-generated method stub
 		boolean pass = true;
 		
 		String op = request.getParameter("operation");
@@ -49,34 +53,53 @@ public class LoginCtl extends BaseCtl{
 	
 	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
-		// TODO Auto-generated method stub
 		UserBean bean = new UserBean();
 		bean.setLogin(DataUtility.getString(request.getParameter("login")));
 		bean.setPassword(DataUtility.getString(request.getParameter("password")));
+		populateDTO(bean, request);
 		return bean;
 	}
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		String op = DataUtility.getString(req.getParameter("operation"));
+		if(OP_LOG_OUT.equalsIgnoreCase(op)) {
+			HttpSession session = req.getSession();
+			session.invalidate();
+			ServletUtility.setSuccessMessage("Logout Successfully !!!", req);
+		}
 		ServletUtility.forward(getView(), req, resp);
 	}
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		String op = DataUtility.getString(req.getParameter("operation"));
 		if(OP_SIGN_UP.equalsIgnoreCase(op)) {
 			ServletUtility.redirect(ORSView.USER_REGISTRATION_CTL, req, resp);
 			return;
+		}else if(OP_SIGN_IN.equalsIgnoreCase(op)) {
+			UserBean bean = (UserBean) populateBean(req);
+			try {
+				UserModel model = new UserModel();
+				RoleModel roleModel = new RoleModel();
+				System.out.println(bean.getLogin()+" "+bean.getPassword());
+				UserBean user = model.authenticate(bean.getLogin(), bean.getPassword());
+				RoleBean roleBean = roleModel.findByPk(user.getRoleId());
+				HttpSession session = req.getSession();
+				session.setAttribute("user", user);
+				session.setAttribute("role", roleBean.getName());
+				ServletUtility.redirect(ORSView.WELCOME_CTL, req, resp);
+				return;
+			}catch(ApplicationException ae) {
+				ServletUtility.setBean(bean, req);
+				ServletUtility.setErrorMessage("User Not Found", req);
+				ServletUtility.forward(getView(), req, resp);
+			}
 		}
-		
-		ServletUtility.forward(getView(), req, resp);
 	}
 
 	@Override
 	protected String getView() {
-		// TODO Auto-generated method stub
 		return ORSView.LOGIN_VIEW;
 	}
 

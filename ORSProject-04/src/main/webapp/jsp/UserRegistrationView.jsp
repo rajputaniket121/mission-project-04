@@ -31,6 +31,15 @@
 				</h3>
 			</div>
 
+			<div>
+				<input name ="id" type="hidden" value="<%=bean.getId()%>">
+				<input name ="createdBy" type="hidden" value="<%=bean.getCreatedBy()%>">
+				<input name ="modifiedBy" type="hidden" value="<%=bean.getModifiedBy()%>">
+				<input name ="createdDateTime" type="hidden" value="<%=DataUtility.getTimestamp(bean.getCreatedDateTime())%>">
+				<input name ="modifiedDateTime" type="hidden" value="<%=DataUtility.getTimestamp(bean.getModifiedDateTime())%>">
+			</div>
+
+
 			<table>
 
 				<tr>
