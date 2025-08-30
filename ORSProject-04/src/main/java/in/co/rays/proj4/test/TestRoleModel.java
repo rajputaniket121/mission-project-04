@@ -16,9 +16,9 @@ public class TestRoleModel {
 		//testAddRole();
 		//testUpdateRole();
 		//testDeleteRole();
-		//testFindByPk();
+		testFindByPk();
 		//testFindByName();
-		testSearch();
+		//testSearch();
 		//testList();
 	}
 	

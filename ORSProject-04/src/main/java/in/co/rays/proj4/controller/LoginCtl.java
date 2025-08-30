@@ -23,7 +23,6 @@ import in.co.rays.proj4.util.ServletUtility;
 public class LoginCtl extends BaseCtl{
 	public static final String  OP_SIGN_IN = "Sign In";
 	public static final String  OP_SIGN_UP = "Sign Up";
-	public static final String  OP_LOG_OUT = "Logout";
 	
 	
 	@Override
@@ -56,7 +55,6 @@ public class LoginCtl extends BaseCtl{
 		UserBean bean = new UserBean();
 		bean.setLogin(DataUtility.getString(request.getParameter("login")));
 		bean.setPassword(DataUtility.getString(request.getParameter("password")));
-		populateDTO(bean, request);
 		return bean;
 	}
 	
@@ -82,7 +80,6 @@ public class LoginCtl extends BaseCtl{
 			try {
 				UserModel model = new UserModel();
 				RoleModel roleModel = new RoleModel();
-				System.out.println(bean.getLogin()+" "+bean.getPassword());
 				UserBean user = model.authenticate(bean.getLogin(), bean.getPassword());
 				RoleBean roleBean = roleModel.findByPk(user.getRoleId());
 				HttpSession session = req.getSession();
@@ -92,7 +89,7 @@ public class LoginCtl extends BaseCtl{
 				return;
 			}catch(ApplicationException ae) {
 				ServletUtility.setBean(bean, req);
-				ServletUtility.setErrorMessage("User Not Found", req);
+				ServletUtility.setErrorMessage("Invalid Login id & Password", req);
 				ServletUtility.forward(getView(), req, resp);
 			}
 		}
