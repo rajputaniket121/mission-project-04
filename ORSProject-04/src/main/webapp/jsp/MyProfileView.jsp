@@ -34,11 +34,6 @@
 					</font>
 				</h3>
 			</div>
-			
-			<div>
-				<input name ="id" type="hidden" value="<%=bean.getId()%>">
-			</div>
-	
 
 			<table>
 			<tr>

@@ -132,7 +132,7 @@ public class StudentModel {
 		}
 	}
 
-	public StudentBean findByPk(Long id) throws ApplicationException {
+	public StudentBean findByPk(long id) throws ApplicationException {
 		Connection conn = null;
 		StudentBean bean = null;
 		StringBuffer sql = new StringBuffer("select * from st_student where id = ?");
@@ -214,7 +214,7 @@ public class StudentModel {
 		List<StudentBean> studentList = new ArrayList<StudentBean>();
 
 		if (bean != null) {
-			if (bean.getId()!= null && bean.getId() > 0) {
+			if (bean.getId() > 0) {
 				sql.append(" and id = "+bean.getId());
 			}
 			if (bean.getFirstName()!= null && bean.getFirstName().length() > 0) {

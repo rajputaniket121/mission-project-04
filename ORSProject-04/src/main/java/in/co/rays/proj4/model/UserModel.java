@@ -241,7 +241,7 @@ public class UserModel {
 		List<UserBean> userList = new ArrayList<UserBean>();
 
 		if (bean != null) {
-			if (bean.getId() != null && bean.getId() > 0) {
+			if (bean.getId() > 0) {
 				sql.append(" and id = "+bean.getId());
 			}
 			if (bean.getFirstName()!= null && bean.getFirstName().length() > 0) {

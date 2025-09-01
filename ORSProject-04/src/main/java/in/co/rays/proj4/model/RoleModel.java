@@ -180,7 +180,7 @@ public class RoleModel {
 		List<RoleBean> roleList = new ArrayList<RoleBean>();
 
 		if (bean != null) {
-			if (bean.getId() != null && bean.getId() > 0) {
+			if (bean.getId() > 0) {
 				sql.append(" and id = "+bean.getId());
 			}
 			if (bean.getName()!= null && bean.getName().length() > 0) {

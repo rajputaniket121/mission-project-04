@@ -121,7 +121,7 @@ public class MyProfileCtl extends BaseCtl {
 				ServletUtility.forward(getView(), req, resp);
 			}
 		} else if (OP_CHANGE_PASSWORD.equalsIgnoreCase(op)){
-			ServletUtility.forward(getView(), req, resp);
+			ServletUtility.forward(ORSView.MY_PROFILE_CTL, req, resp);
 			return;
 		}
 	}

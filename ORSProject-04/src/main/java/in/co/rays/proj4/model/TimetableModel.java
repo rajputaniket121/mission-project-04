@@ -179,7 +179,7 @@ public class TimetableModel {
 		List<TimetableBean> timetableList = new ArrayList<TimetableBean>();
 
 		if (bean != null) {
-			if (bean.getId()!=null && bean.getId() > 0) {
+			if (bean.getId() > 0) {
 				sql.append(" and id = "+bean.getId());
 			}
 			if (bean.getSemester()!= null && bean.getSemester().length() > 0) {

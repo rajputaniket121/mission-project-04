@@ -20,7 +20,7 @@ public class MarksheetModel {
 		Long pk = 0l;
 		MarksheetBean exist = findByRollNO(bean.getRollNo());
 		if(exist!=null) {
-			throw new RuntimeException("Marksheet already Exist");
+			throw new DuplicateRecordException("Marksheet already Exist");
 		}
 		StudentModel stuModel = new StudentModel();
 		StudentBean stuBean =stuModel.findByPk(bean.getStudentId());
@@ -203,7 +203,7 @@ public class MarksheetModel {
 		List<MarksheetBean> marksheetList = new ArrayList<MarksheetBean>();
 
 		if (bean != null) {
-			if (bean.getId()!=null && bean.getId() > 0) {
+			if (bean.getId() > 0) {
 				sql.append(" and id = "+bean.getId());
 			}
 			if (bean.getRollNo()!= null && bean.getRollNo().length() > 0) {

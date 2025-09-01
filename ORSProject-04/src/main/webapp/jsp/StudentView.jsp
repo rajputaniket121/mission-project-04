@@ -1,47 +1,59 @@
 <%@page import="in.co.rays.proj4.controller.ORSView"%>
-<%@page import="in.co.rays.proj4.controller.UserRegistrationCtl"%>
+<%@page import="in.co.rays.proj4.controller.UserCtl"%>
+<%@page import="in.co.rays.proj4.bean.StudentBean"%>
+<%@page import="java.util.List"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="in.co.rays.proj4.util.HTMLUtility"%>
+<%@page import="in.co.rays.proj4.controller.StudentCtl"%>
 <%@page import="in.co.rays.proj4.util.DataUtility"%>
 <%@page import="in.co.rays.proj4.util.ServletUtility"%>
 <html>
 <head>
-<title>User Registration</title>
+<title>Add Student</title>
+<link rel="icon" type="image/png"
+	href="<%=ORSView.APP_CONTEXT%>/img/logo.png" sizes="16x16" />
 </head>
 <body>
-	<form action="<%=ORSView.USER_REGISTRATION_CTL%>" method="post">
-
+	<form action="<%=ORSView.STUDENT_CTL%>" method="POST">
 		<%@ include file="Header.jsp"%>
 
-		<jsp:useBean id="bean" class="in.co.rays.proj4.bean.UserBean"
+		<jsp:useBean id="bean" class="in.co.rays.proj4.bean.StudentBean"
 			scope="request"></jsp:useBean>
 
+		<%
+			@SuppressWarnings("unchecked")
+			List<StudentBean> l = (List<StudentBean>) request.getAttribute("collegeList");
+		%>
+
 		<div align="center">
-			<h1 align="center" style="margin-bottom: -15; color: navy">User
-				Registration</h1>
+			<h1 align="center" style="margin-bottom: -15; color: navy">
+				<%
+					if (bean != null && bean.getId()>0) {
+				%>Update<%
+					} else {
+				%>Add<%
+					}
+				%>
+				Student
+			</h1>
 
 			<div style="height: 15px; margin-bottom: 12px">
-				<h3 align="center">
+				<H3 align="center">
 					<font color="green"> <%=ServletUtility.getSuccessMessage(request)%>
 					</font>
-				</h3>
-				<h3 align="center">
+				</H3>
+				<H3 align="center">
 					<font color="red"> <%=ServletUtility.getErrorMessage(request)%>
 					</font>
-				</h3>
+				</H3>
 			</div>
-
-			<div>
-				<input name ="id" type="hidden" value="<%=bean.getId()%>">
-				<input name ="createdBy" type="hidden" value="<%=bean.getCreatedBy()%>">
-				<input name ="modifiedBy" type="hidden" value="<%=bean.getModifiedBy()%>">
-				<input name ="createdDateTime" type="hidden" value="<%=DataUtility.getTimestamp(bean.getCreatedDateTime())%>">
-				<input name ="modifiedDateTime" type="hidden" value="<%=DataUtility.getTimestamp(bean.getModifiedDateTime())%>">
-			</div>
-
+			<input type="hidden" name="id" value="<%=bean.getId()%>">
+			<input type="hidden" name="createdBy" value="<%=bean.getCreatedBy()%>">
+			<input type="hidden" name="modifiedBy" value="<%=bean.getModifiedBy()%>">
+			<input type="hidden" name="createdDatetime" value="<%=DataUtility.getTimestamp(bean.getCreatedDateTime())%>">
+			<input type="hidden" name="modifiedDatetime" value="<%=DataUtility.getTimestamp(bean.getModifiedDateTime())%>">
 
 			<table>
-
 				<tr>
 					<th align="left">First Name<span style="color: red">*</span></th>
 					<td><input type="text" name="firstName"
@@ -51,31 +63,16 @@
 				</tr>
 				<tr>
 					<th align="left">Last Name<span style="color: red">*</span></th>
-					<td><input type="text" name="lastName"
-						placeholder="Enter Last Name"
+					<td><input type="text" name="lastName" placeholder="Enter Last Name"
 						value="<%=DataUtility.getStringData(bean.getLastName())%>"></td>
 					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("lastName", request)%></font></td>
 				</tr>
 				<tr>
-					<th align="left">Login Id<span style="color: red">*</span></th>
-					<td><input type="text" name="login"
+					<th align="left">Email Id<span style="color: red">*</span></th>
+					<td><input type="text" name="email"
 						placeholder="Enter Email ID"
-						value="<%=DataUtility.getStringData(bean.getLogin())%>"></td>
-					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("login", request)%></font></td>
-				</tr>
-				<tr>
-					<th align="left">Password<span style="color: red">*</span></th>
-					<td><input type="password" name="password"
-						placeholder="Enter Password"
-						value="<%=DataUtility.getStringData(bean.getPassword())%>"></td>
-					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("password", request)%></font></td>
-				</tr>
-				<tr>
-					<th align="left">Confirm Password<span style="color: red">*</span></th>
-					<td><input type="password" name="confirmPassword"
-						placeholder="Enter Confirm Password"
-						value="<%=DataUtility.getStringData(bean.getConfirmPassword())%>"></td>
-					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("confirmPassword", request)%></font></td>
+						value="<%=DataUtility.getStringData(bean.getEmail())%>"></td>
+					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("email", request)%></font></td>
 				</tr>
 				<tr>
 					<th align="left" >Date of Birth<span style="color: red">*</span></th>
@@ -88,14 +85,17 @@
 					<td>
 						<%
 							HashMap<String, String> map = new HashMap<String, String>();
-							map.put("Female", "Female");
 							map.put("Male", "Male");
-
+							map.put("Female", "Female");
 							String htmlList = HTMLUtility.getList("gender", bean.getGender(), map);
 						%> <%=htmlList%>
-
 					</td>
 					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("gender", request)%></font></td>
+				</tr>
+				<tr>
+					<th align="left">College<span style="color: red">*</span></th>
+					<td><%=HTMLUtility.getList("collegeId", String.valueOf(bean.getCollegeId()), l)%></td>
+					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("collegeId", request)%></font></td>
 				</tr>
 				<tr>
 					<th align="left">Mobile No<span style="color: red">*</span></th>
@@ -110,10 +110,21 @@
 				</tr>
 				<tr>
 					<th></th>
+					<%
+						if (bean != null && bean.getId() >0) {
+					%>
 					<td align="left" colspan="2"><input type="submit"
-						name="operation" value="<%=UserRegistrationCtl.OP_SIGN_UP%>">&nbsp;
-						<input type="submit" name="operation"
-						value="<%=UserRegistrationCtl.OP_RESET%>"></td>
+						name="operation" value="<%=StudentCtl.OP_UPDATE%>"> <input
+						type="submit" name="operation" value="<%=StudentCtl.OP_CANCEL%>">
+						<%
+							} else {
+						%>
+					<td align="left" colspan="2"><input type="submit"
+						name="operation" value="<%=StudentCtl.OP_SAVE%>"> <input
+						type="submit" name="operation" value="<%=StudentCtl.OP_RESET%>">
+						<%
+							}
+						%>
 				</tr>
 			</table>
 		</div>

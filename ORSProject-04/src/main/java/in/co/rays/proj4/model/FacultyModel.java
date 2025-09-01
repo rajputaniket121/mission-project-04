@@ -22,7 +22,7 @@ public class FacultyModel {
 		
 		FacultyBean exist = findByEmail(bean.getEmail());
 		if(exist!=null) {
-			throw new RuntimeException("Email Id already Exist");
+			throw new DuplicateRecordException("Email Id already Exist");
 		}
 		
 		CollegeModel clgModel = new CollegeModel();
@@ -249,7 +249,7 @@ public class FacultyModel {
 		List<FacultyBean> timetableList = new ArrayList<FacultyBean>();
 
 		if (bean != null) {
-			if (bean.getId()!=null && bean.getId() > 0) {
+			if (bean.getId() > 0) {
 				sql.append(" and id = "+bean.getId());
 			}
 			if (bean.getFirstName()!= null && bean.getFirstName().length() > 0) {

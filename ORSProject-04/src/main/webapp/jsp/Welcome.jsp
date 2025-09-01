@@ -15,7 +15,7 @@
 			<font size="10px" color="navy">Welcome to ORS</font>
 		</h1>
 
-		<%-- <%
+		<%
 			UserBean beanUserBean = (UserBean) session.getAttribute("user");
 			if (beanUserBean != null) {
 				if (beanUserBean.getRoleId() == RoleBean.STUDENT) {
@@ -29,7 +29,7 @@
 		<%
 			}
 			}
-		%> --%>
+		%>
 
 	</form>
 </body>
