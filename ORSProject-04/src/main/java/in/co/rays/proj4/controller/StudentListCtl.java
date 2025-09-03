@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import in.co.rays.proj4.bean.BaseBean;
 import in.co.rays.proj4.bean.StudentBean;
+import in.co.rays.proj4.bean.StudentBean;
 import in.co.rays.proj4.exception.ApplicationException;
+import in.co.rays.proj4.model.StudentModel;
 import in.co.rays.proj4.model.StudentModel;
 import in.co.rays.proj4.util.DataUtility;
 import in.co.rays.proj4.util.PropertyReader;
@@ -56,8 +58,77 @@ public class StudentListCtl extends BaseCtl{
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		ServletUtility.redirect(ORSView.STUDENT_LIST_CTL, req, resp);
-		return;
+		List<StudentBean> list = null;
+		List<StudentBean> next = null;
+		
+		int pageNo = DataUtility.getInt(req.getParameter("pageNo"));
+		int pageSize = DataUtility.getInt(req.getParameter("pageSize"));
+		
+		pageNo = (pageNo==0)? 1 : pageNo;
+		pageSize = (pageSize==0)? (DataUtility.getInt(PropertyReader.getValue("page.size")))  : pageSize;
+		StudentBean bean = new StudentBean();
+		StudentModel model = new StudentModel();
+		
+		String op = DataUtility.getString(req.getParameter("operation"));
+		
+		try {
+			
+		if(OP_SEARCH.equalsIgnoreCase(op) || OP_NEXT.equalsIgnoreCase(op) || OP_PREVIOUS.equalsIgnoreCase(op)) {
+			
+			if(OP_SEARCH.equalsIgnoreCase(op)) {
+				pageNo=1;
+				bean = (StudentBean) populateBean(req);
+				
+			}else if(OP_NEXT.equalsIgnoreCase(op)) {
+				pageNo++;
+				
+			}else if(OP_PREVIOUS.equalsIgnoreCase(op)) {
+				pageNo--;
+			}
+			
+			
+		} else if(OP_RESET.equalsIgnoreCase(op)) {
+			ServletUtility.redirect(ORSView.STUDENT_LIST_CTL, req, resp);
+			return;
+		}else if(OP_NEW.equalsIgnoreCase(op)) {
+			ServletUtility.redirect(ORSView.STUDENT_CTL, req, resp);
+			return;
+			
+		}else if(OP_DELETE.equalsIgnoreCase(op)) {
+			pageNo=1;
+			String[] ids = req.getParameterValues("ids");	
+			if(ids!=null && ids.length>0) {
+				StudentBean deleteBean = new StudentBean();
+				for(String id  : ids) {
+					deleteBean.setId(DataUtility.getLong(id));
+					model.deleteStudent(deleteBean.getId());
+					ServletUtility.setSuccessMessage("Deleted Successfully !!!", req);
+				}
+			}else {
+				ServletUtility.setErrorMessage("Select Atleast one Checkbox", req);
+			}
+			
+		}else if(OP_BACK.equalsIgnoreCase(op)) {
+			ServletUtility.redirect(ORSView.STUDENT_LIST_CTL, req, resp);
+			return;
+		}
+		
+		list= model.search(bean, pageNo, pageSize);
+		next = model.search(bean, pageNo+1, pageSize);
+			if(list.isEmpty() || list==null) {
+				ServletUtility.setErrorMessage("No Records found", req);
+			}
+			ServletUtility.setList(list, req);
+			ServletUtility.setBean(bean, req);
+			ServletUtility.setPageNo(pageNo, req);
+			ServletUtility.setPageSize(pageSize, req);
+			req.setAttribute("nextListSize", next.size());
+		} catch (ApplicationException e) {
+			e.printStackTrace();
+			ServletUtility.handleException(e, req, resp);
+			return;
+		}
+		ServletUtility.forward(getView(), req, resp);
 	}
 	
 	

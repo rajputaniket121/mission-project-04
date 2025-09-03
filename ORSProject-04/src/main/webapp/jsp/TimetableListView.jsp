@@ -107,7 +107,7 @@
 
 					<td style="width: 25%"><input type="submit" name="operation"
 						value="<%=TimetableListCtl.OP_PREVIOUS%>"
-						<%=pageNo == 1 ? "" : "disabled" %>></td>
+						<%=pageNo > 1 ? "" : "disabled" %>></td>
 					<td align="center" style="width: 25%"><input type="submit"
 						name="operation" value="<%=TimetableListCtl.OP_NEW%>"></td>
 					<td align="center" style="width: 25%"><input type="submit"

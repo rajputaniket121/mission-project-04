@@ -135,7 +135,7 @@ public class UserRegistrationCtl extends BaseCtl {
 			}
 			ServletUtility.forward(getView(), req, resp);
 		}else if(OP_RESET.equalsIgnoreCase(op)) {
-			ServletUtility.redirect(getView(), req, resp);
+			ServletUtility.redirect(ORSView.USER_REGISTRATION_CTL, req, resp);
 			return;
 		}
 	}
