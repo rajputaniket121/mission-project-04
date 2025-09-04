@@ -26,7 +26,7 @@ public class StudentCtl extends  BaseCtl{
             List<CollegeBean> collegeList =  collegeModel.list();
             request.setAttribute("collegeList", collegeList);
         } catch (ApplicationException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
@@ -96,6 +96,7 @@ public class StudentCtl extends  BaseCtl{
     @Override
     protected BaseBean populateBean(HttpServletRequest request) {
         StudentBean bean = new StudentBean();
+        bean.setId(DataUtility.getLong(request.getParameter("id")));
         bean.setFirstName(DataUtility.getString(request.getParameter("firstName")));
         bean.setLastName(DataUtility.getString(request.getParameter("lastName")));
         bean.setEmail(DataUtility.getString(request.getParameter("email")));
@@ -109,16 +110,28 @@ public class StudentCtl extends  BaseCtl{
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    	Long id = DataUtility.getLong(req.getParameter("id"));
+    	StudentModel model = new StudentModel();
+    	if(id>0) {
+    		try {
+    			StudentBean bean = model.findByPk(id);
+				ServletUtility.setBean(bean, req);
+			} catch (ApplicationException e) {
+				e.printStackTrace();
+				ServletUtility.handleException(e, req, resp);
+				return;
+			}
+    	}
         ServletUtility.forward(getView(), req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String op = DataUtility.getString(req.getParameter("operation"));
+        StudentModel model = new StudentModel();
         if(UserCtl.OP_SAVE.equalsIgnoreCase(op)) {
             StudentBean bean = (StudentBean) populateBean(req);
             try {
-                StudentModel model = new StudentModel();
                 model.addStudent(bean);
                 ServletUtility.setBean(bean, req);
                 ServletUtility.setSuccessMessage("Student Added SuccessFully !!!", req);
@@ -129,11 +142,29 @@ public class StudentCtl extends  BaseCtl{
                 ae.printStackTrace();
                 ServletUtility.handleException(ae, req, resp);
             }
-            ServletUtility.forward(getView(), req, resp);
         }else if(OP_RESET.equalsIgnoreCase(op)) {
             ServletUtility.redirect(ORSView.STUDENT_CTL, req, resp);
             return;
-        }
+        }else if(OP_UPDATE.equalsIgnoreCase(op)) {
+        	StudentBean bean = (StudentBean) populateBean(req);
+	       	try {
+	               model.updateStudent(bean);
+	               ServletUtility.setBean(bean, req);
+	               ServletUtility.setSuccessMessage("Student Updated SuccessFully !!!", req);
+	           }catch(DuplicateRecordException dre) {
+	               ServletUtility.setBean(bean, req);
+	               ServletUtility.setErrorMessage("Email Already Exist !!!", req);
+	           }catch(ApplicationException ae) {
+	               ae.printStackTrace();
+	               ServletUtility.handleException(ae, req, resp);
+	               return;
+	           }
+	       }
+	       else if(OP_CANCEL.equalsIgnoreCase(op)) {
+	       	 ServletUtility.redirect(ORSView.STUDENT_LIST_CTL, req, resp);
+	       	 return;
+	       }
+	       ServletUtility.forward(getView(), req, resp);
     }
 
 

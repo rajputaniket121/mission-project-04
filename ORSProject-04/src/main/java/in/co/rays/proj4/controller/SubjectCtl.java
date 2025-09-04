@@ -70,6 +70,7 @@ public class SubjectCtl extends BaseCtl{
     @Override
     protected BaseBean populateBean(HttpServletRequest request) {
         SubjectBean bean = new SubjectBean();
+        bean.setId(DataUtility.getLong(request.getParameter("id")));
         bean.setName(DataUtility.getString(request.getParameter("name")));
         bean.setCourseId(DataUtility.getLong(request.getParameter("courseId")));
         bean.setDescription(DataUtility.getString(request.getParameter("description")));
@@ -79,17 +80,29 @@ public class SubjectCtl extends BaseCtl{
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    	Long id = DataUtility.getLong(req.getParameter("id"));
+    	SubjectModel model = new SubjectModel();
+    	if(id>0) {
+    		try {
+    			SubjectBean bean = model.findByPk(id);
+				ServletUtility.setBean(bean, req);
+			} catch (ApplicationException e) {
+				e.printStackTrace();
+				ServletUtility.handleException(e, req, resp);
+				return;
+			}
+    	}
         ServletUtility.forward(getView(), req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String op = DataUtility.getString(req.getParameter("operation"));
+        SubjectModel model = new SubjectModel();
         if(UserCtl.OP_SAVE.equalsIgnoreCase(op)) {
             SubjectBean bean = (SubjectBean) populateBean(req);
             try {
-            	SubjectModel model = new SubjectModel();
-                model.addSubject(bean);
+            	model.addSubject(bean);
                 ServletUtility.setBean(bean, req);
                 ServletUtility.setSuccessMessage("Subject Added SuccessFully !!!", req);
             }catch(DuplicateRecordException dre) {
@@ -102,9 +115,28 @@ public class SubjectCtl extends BaseCtl{
             }
             ServletUtility.forward(getView(), req, resp);
         }else if(OP_RESET.equalsIgnoreCase(op)) {
-            ServletUtility.redirect(ORSView.COURSE_CTL, req, resp);
+            ServletUtility.redirect(ORSView.SUBJECT_CTL, req, resp);
             return;
-        }
+        }else if(OP_UPDATE.equalsIgnoreCase(op)) {
+        	SubjectBean bean = (SubjectBean) populateBean(req);
+	       	try {
+	               model.updateSubject(bean);
+	               ServletUtility.setBean(bean, req);
+	               ServletUtility.setSuccessMessage("Subject Updated SuccessFully !!!", req);
+	           }catch(DuplicateRecordException dre) {
+	               ServletUtility.setBean(bean, req);
+	               ServletUtility.setErrorMessage("Subject Already Exist !!!", req);
+	           }catch(ApplicationException ae) {
+	               ae.printStackTrace();
+	               ServletUtility.handleException(ae, req, resp);
+	               return;
+	           }
+	       }
+	       else if(OP_CANCEL.equalsIgnoreCase(op)) {
+	       	 ServletUtility.redirect(ORSView.SUBJECT_LIST_CTL, req, resp);
+	       	 return;
+	       }
+	       ServletUtility.forward(getView(), req, resp);
     }
 
 	@Override

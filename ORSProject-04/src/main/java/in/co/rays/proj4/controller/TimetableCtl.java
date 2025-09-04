@@ -10,13 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import in.co.rays.proj4.bean.BaseBean;
 import in.co.rays.proj4.bean.CourseBean;
-import in.co.rays.proj4.bean.RoleBean;
 import in.co.rays.proj4.bean.SubjectBean;
 import in.co.rays.proj4.bean.TimetableBean;
 import in.co.rays.proj4.exception.ApplicationException;
 import in.co.rays.proj4.exception.DuplicateRecordException;
 import in.co.rays.proj4.model.CourseModel;
-import in.co.rays.proj4.model.RoleModel;
 import in.co.rays.proj4.model.SubjectModel;
 import in.co.rays.proj4.model.TimetableModel;
 import in.co.rays.proj4.util.DataUtility;
@@ -76,9 +74,14 @@ public class TimetableCtl extends BaseCtl {
 	            request.setAttribute("examDate", PropertyReader.getValue("error.require", "ExamDate"));
 	            pass = false;
 	        } else if (!DataValidator.isDate(request.getParameter("examDate"))) {
-	            request.setAttribute("examDate", PropertyReader.getValue("error.date", "Date of Birth"));
+	            request.setAttribute("examDate", PropertyReader.getValue("error.date", "ExamDate"));
+	            pass = false;
+	        }else if (!DataValidator.isSunday(request.getParameter("examDate"))) {
+	            request.setAttribute("examDate", PropertyReader.getValue("error.date", "Exam Should not be on Sunday "));
 	            pass = false;
 	        }
+	        
+	        
 	        if(DataValidator.isNull(request.getParameter("examTime"))){
 	            request.setAttribute("examTime", PropertyReader.getValue("error.require", "ExamTime "));
 	            pass = false;
@@ -95,6 +98,7 @@ public class TimetableCtl extends BaseCtl {
 	    @Override
 	    protected BaseBean populateBean(HttpServletRequest request) {
 	        TimetableBean bean = new TimetableBean();
+	        bean.setId(DataUtility.getLong(request.getParameter("id")));
 	        bean.setCourseId(DataUtility.getLong(request.getParameter("courseId")));
 	        bean.setSubjectId(DataUtility.getLong(request.getParameter("subjectId")));
 	        bean.setSemester(DataUtility.getString(request.getParameter("semester")));
@@ -107,16 +111,29 @@ public class TimetableCtl extends BaseCtl {
 
 	    @Override
 	    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	    	Long id = DataUtility.getLong(req.getParameter("id"));
+	    	TimetableModel model = new TimetableModel();
+	    	if(id>0) {
+	    		try {
+	    			TimetableBean bean = model.findByPk(id);
+					ServletUtility.setBean(bean, req);
+				} catch (ApplicationException e) {
+					e.printStackTrace();
+					ServletUtility.handleException(e, req, resp);
+					return;
+				}
+	    	}
 	        ServletUtility.forward(getView(), req, resp);
 	    }
 
 	    @Override
 	    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 	        String op = DataUtility.getString(req.getParameter("operation"));
+	        TimetableModel model = new TimetableModel();
 	        if(TimetableCtl.OP_SAVE.equalsIgnoreCase(op)) {
 	            TimetableBean bean = (TimetableBean) populateBean(req);
+	            
 	            try {
-	                TimetableModel model = new TimetableModel();
 	                model.addTimetable(bean);
 	                ServletUtility.setBean(bean, req);
 	                ServletUtility.setSuccessMessage("Timetable Added SuccessFully !!!", req);
@@ -131,7 +148,26 @@ public class TimetableCtl extends BaseCtl {
 	        }else if(OP_RESET.equalsIgnoreCase(op)) {
 	            ServletUtility.redirect(ORSView.TIMETABLE_CTL, req, resp);
 	            return;
-	        }
+	        }else if(OP_UPDATE.equalsIgnoreCase(op)) {
+	        	TimetableBean bean = (TimetableBean) populateBean(req);
+		       	try {
+		               model.updateTimetable(bean);
+		               ServletUtility.setBean(bean, req);
+		               ServletUtility.setSuccessMessage("Timetable Updated SuccessFully !!!", req);
+		           }catch(DuplicateRecordException dre) {
+		               ServletUtility.setBean(bean, req);
+		               ServletUtility.setErrorMessage("Already Exist !!!", req);
+		           }catch(ApplicationException ae) {
+		               ae.printStackTrace();
+		               ServletUtility.handleException(ae, req, resp);
+		               return;
+		           }
+		       }
+		       else if(OP_CANCEL.equalsIgnoreCase(op)) {
+		       	 ServletUtility.redirect(ORSView.TIMETABLE_LIST_CTL, req, resp);
+		       	 return;
+		       }
+		       ServletUtility.forward(getView(), req, resp);
 	    }
 
 

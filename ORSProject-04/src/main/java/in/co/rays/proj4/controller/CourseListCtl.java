@@ -10,9 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import in.co.rays.proj4.bean.BaseBean;
 import in.co.rays.proj4.bean.CourseBean;
-import in.co.rays.proj4.bean.CourseBean;
 import in.co.rays.proj4.exception.ApplicationException;
-import in.co.rays.proj4.model.CourseModel;
 import in.co.rays.proj4.model.CourseModel;
 import in.co.rays.proj4.util.DataUtility;
 import in.co.rays.proj4.util.PropertyReader;
@@ -35,7 +33,7 @@ public class CourseListCtl extends BaseCtl{
 	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
 		CourseBean bean = new CourseBean();
-		bean.setId(DataUtility.getLong(request.getParameter("id")));
+		bean.setId(DataUtility.getLong(request.getParameter("courseId")));
 		return bean;
 	}
 	
@@ -75,7 +73,7 @@ public class CourseListCtl extends BaseCtl{
 		
 		pageNo = (pageNo==0)? 1 : pageNo;
 		pageSize = (pageSize==0)? (DataUtility.getInt(PropertyReader.getValue("page.size")))  : pageSize;
-		CourseBean bean = new CourseBean();
+		CourseBean bean = (CourseBean) populateBean(req);
 		CourseModel model = new CourseModel();
 		
 		String op = DataUtility.getString(req.getParameter("operation"));
@@ -86,12 +84,11 @@ public class CourseListCtl extends BaseCtl{
 			
 			if(OP_SEARCH.equalsIgnoreCase(op)) {
 				pageNo=1;
-				bean = (CourseBean) populateBean(req);
 				
 			}else if(OP_NEXT.equalsIgnoreCase(op)) {
 				pageNo++;
 				
-			}else if(OP_PREVIOUS.equalsIgnoreCase(op)) {
+			}else if(OP_PREVIOUS.equalsIgnoreCase(op) && pageNo>1) {
 				pageNo--;
 			}
 			

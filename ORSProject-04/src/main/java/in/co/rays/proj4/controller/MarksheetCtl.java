@@ -58,29 +58,44 @@ public class MarksheetCtl extends BaseCtl{
 	            pass = false;
 	        }
 
-	        if(DataValidator.isNull(request.getParameter("physics"))) {
-	            request.setAttribute("physics", PropertyReader.getValue("error.require","Physics "));
-	            pass = false;
-	        } else if(!DataValidator.isInteger(request.getParameter("physics"))) {
-	            request.setAttribute("physics",PropertyReader.getValue("error.require","Physics"));
-	            pass = false;
-	        }
+	        if (DataValidator.isNull(request.getParameter("physics"))) {
+				request.setAttribute("physics", PropertyReader.getValue("error.require", "Marks"));
+				pass = false;
+			} else if (DataValidator.isNotNull(request.getParameter("physics"))
+					&& !DataValidator.isInteger(request.getParameter("physics"))) {
+				request.setAttribute("physics", PropertyReader.getValue("error.integer", "Marks"));
+				pass = false;
+			} else if (DataUtility.getInt(request.getParameter("physics")) > 100
+					|| DataUtility.getInt(request.getParameter("physics")) < 0) {
+				request.setAttribute("physics", "Marks should be in 0 to 100");
+				pass = false;
+			}
 
-	        if(DataValidator.isNull(request.getParameter("chemistry"))) {
-	            request.setAttribute("chemistry", PropertyReader.getValue("error.require","Chemistry "));
-	            pass = false;
-	        } else if(!DataValidator.isInteger(request.getParameter("chemistry"))) {
-	            request.setAttribute("chemistry",PropertyReader.getValue("error.require","Chemistry"));
-	            pass = false;
-	        }
+	        if (DataValidator.isNull(request.getParameter("chemistry"))) {
+				request.setAttribute("chemistry", PropertyReader.getValue("error.require", "Marks"));
+				pass = false;
+			} else if (DataValidator.isNotNull(request.getParameter("chemistry"))
+					&& !DataValidator.isInteger(request.getParameter("chemistry"))) {
+				request.setAttribute("chemistry", PropertyReader.getValue("error.integer", "Marks"));
+				pass = false;
+			} else if (DataUtility.getInt(request.getParameter("chemistry")) > 100
+					|| DataUtility.getInt(request.getParameter("chemistry")) < 0) {
+				request.setAttribute("chemistry", "Marks should be in 0 to 100");
+				pass = false;
+			}
 	        
-	        if(DataValidator.isNull(request.getParameter("maths"))) {
-	            request.setAttribute("maths", PropertyReader.getValue("error.require","Maths "));
-	            pass = false;
-	        } else if(!DataValidator.isInteger(request.getParameter("maths"))) {
-	            request.setAttribute("maths",PropertyReader.getValue("error.require","Maths"));
-	            pass = false;
-	        }
+	        if (DataValidator.isNull(request.getParameter("maths"))) {
+				request.setAttribute("maths", PropertyReader.getValue("error.require", "Marks"));
+				pass = false;
+			} else if (DataValidator.isNotNull(request.getParameter("maths"))
+					&& !DataValidator.isInteger(request.getParameter("maths"))) {
+				request.setAttribute("maths", PropertyReader.getValue("error.integer", "Marks"));
+				pass = false;
+			} else if (DataUtility.getInt(request.getParameter("maths")) > 100
+					|| DataUtility.getInt(request.getParameter("maths")) < 0) {
+				request.setAttribute("maths", "Marks should be in 0 to 100");
+				pass = false;
+			}
 
 	        return pass;
 	    }
@@ -88,27 +103,46 @@ public class MarksheetCtl extends BaseCtl{
 	    @Override
 	    protected BaseBean populateBean(HttpServletRequest request) {
 	        MarksheetBean bean = new MarksheetBean();
+	        bean.setId(DataUtility.getLong(request.getParameter("id")));
 	        bean.setRollNo(DataUtility.getString(request.getParameter("rollNo")));
 	        bean.setStudentId(DataUtility.getLong(request.getParameter("studentId")));
-	        bean.setPhysics(DataUtility.getInt(request.getParameter("physics")));
-	        bean.setChemistry(DataUtility.getInt(request.getParameter("chemistry")));
-	        bean.setMaths(DataUtility.getInt(request.getParameter("maths")));
+	        if (request.getParameter("physics") != null && request.getParameter("physics").length() != 0) {
+				bean.setPhysics(DataUtility.getInt(request.getParameter("physics")));
+			}
+			if (request.getParameter("chemistry") != null && request.getParameter("chemistry").length() != 0) {
+				bean.setChemistry(DataUtility.getInt(request.getParameter("chemistry")));
+			}
+			if (request.getParameter("maths") != null && request.getParameter("maths").length() != 0) {
+				bean.setMaths(DataUtility.getInt(request.getParameter("maths")));
+			}
 	        populateDTO(bean, request);
 	        return bean;
 	    }
 
 	    @Override
 	    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	    	Long id = DataUtility.getLong(req.getParameter("id"));
+	    	MarksheetModel model = new MarksheetModel();
+	    	if(id>0) {
+	    		try {
+	    			MarksheetBean bean = model.findByPk(id);
+					ServletUtility.setBean(bean, req);
+				} catch (ApplicationException e) {
+					e.printStackTrace();
+					ServletUtility.handleException(e, req, resp);
+					return;
+				}
+	    	}
 	        ServletUtility.forward(getView(), req, resp);
 	    }
 
 	    @Override
 	    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 	        String op = DataUtility.getString(req.getParameter("operation"));
+	        MarksheetModel model = new MarksheetModel();
 	        if(UserCtl.OP_SAVE.equalsIgnoreCase(op)) {
 	            MarksheetBean bean = (MarksheetBean) populateBean(req);
 	            try {
-	            	MarksheetModel model = new MarksheetModel();
 	                model.addMarksheet(bean);
 	                ServletUtility.setBean(bean, req);
 	                ServletUtility.setSuccessMessage("Marksheet Added SuccessFully !!!", req);
@@ -120,17 +154,34 @@ public class MarksheetCtl extends BaseCtl{
 	                ServletUtility.handleException(ae, req, resp);
 	                return;
 	            }
-	            ServletUtility.forward(getView(), req, resp);
 	        }else if(OP_RESET.equalsIgnoreCase(op)) {
 	            ServletUtility.redirect(ORSView.MARKSHEET_CTL, req, resp);
 	            return;
-	        }
+	        }else if(OP_UPDATE.equalsIgnoreCase(op)) {
+	        	MarksheetBean bean = (MarksheetBean) populateBean(req);
+		       	try {
+		               model.updateMarksheet(bean);
+		               ServletUtility.setBean(bean, req);
+		               ServletUtility.setSuccessMessage("Marksheet Updated SuccessFully !!!", req);
+		           }catch(DuplicateRecordException dre) {
+		               ServletUtility.setBean(bean, req);
+		               ServletUtility.setErrorMessage("Marksheet Already Exist !!!", req);
+		           }catch(ApplicationException ae) {
+		               ae.printStackTrace();
+		               ServletUtility.handleException(ae, req, resp);
+		               return;
+		           }
+		       }
+		       else if(OP_CANCEL.equalsIgnoreCase(op)) {
+		       	 ServletUtility.redirect(ORSView.MARKSHEET_LIST_CTL, req, resp);
+		       	 return;
+		       }
+		       ServletUtility.forward(getView(), req, resp);
 	    }
 	
 	
 	@Override
 	protected String getView() {
-		// TODO Auto-generated method stub
 		return ORSView.MARKSHEET_VIEW;
 	}
 

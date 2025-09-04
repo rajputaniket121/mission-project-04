@@ -29,7 +29,7 @@ public class UserCtl extends BaseCtl{
             List<RoleBean> roleList =  roleModel.list();
             request.setAttribute("roleList", roleList);
         } catch (ApplicationException e) {
-            throw new RuntimeException(e);
+           e.printStackTrace();
         }
     }
 
@@ -113,7 +113,7 @@ public class UserCtl extends BaseCtl{
         }
 
         if(DataValidator.isNull(request.getParameter("roleId"))){
-            request.setAttribute("roleId", PropertyReader.getValue("error.require", "Role Id "));
+            request.setAttribute("roleId", PropertyReader.getValue("error.require", "Role "));
             pass = false;
         }
 
@@ -123,6 +123,7 @@ public class UserCtl extends BaseCtl{
     @Override
     protected BaseBean populateBean(HttpServletRequest request) {
         UserBean bean = new UserBean();
+        bean.setId(DataUtility.getLong(request.getParameter("id")));
         bean.setFirstName(DataUtility.getString(request.getParameter("firstName")));
         bean.setLastName(DataUtility.getString(request.getParameter("lastName")));
         bean.setLogin(DataUtility.getString(request.getParameter("login")));
@@ -138,16 +139,28 @@ public class UserCtl extends BaseCtl{
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    	Long id = DataUtility.getLong(req.getParameter("id"));
+    	UserModel model = new UserModel();
+    	if(id>0) {
+    		try {
+				UserBean bean = model.findByPk(id);
+				ServletUtility.setBean(bean, req);
+			} catch (ApplicationException e) {
+				e.printStackTrace();
+				ServletUtility.handleException(e, req, resp);
+				return;
+			}
+    	}
         ServletUtility.forward(getView(), req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String op = DataUtility.getString(req.getParameter("operation"));
+        UserModel model = new UserModel();
         if(UserCtl.OP_SAVE.equalsIgnoreCase(op)) {
-            UserBean bean = (UserBean) populateBean(req);
+        	 UserBean bean = (UserBean) populateBean(req);
             try {
-                UserModel model = new UserModel();
                 model.addUser(bean);
                 ServletUtility.setBean(bean, req);
                 ServletUtility.setSuccessMessage("User Added SuccessFully !!!", req);
@@ -157,12 +170,33 @@ public class UserCtl extends BaseCtl{
             }catch(ApplicationException ae) {
                 ae.printStackTrace();
                 ServletUtility.handleException(ae, req, resp);
+                return;
             }
-            ServletUtility.forward(getView(), req, resp);
+           
         }else if(OP_RESET.equalsIgnoreCase(op)) {
-            ServletUtility.redirect(ORSView.USER_CTL, req, resp);
-            return;
+        	 ServletUtility.redirect(ORSView.USER_CTL, req, resp);
+             return;
         }
+        else if(OP_UPDATE.equalsIgnoreCase(op)) {
+        	 UserBean bean = (UserBean) populateBean(req);
+        	try {
+                model.updateUser(bean);
+                ServletUtility.setBean(bean, req);
+                ServletUtility.setSuccessMessage("User Updated SuccessFully !!!", req);
+            }catch(DuplicateRecordException dre) {
+                ServletUtility.setBean(bean, req);
+                ServletUtility.setErrorMessage("Login Id Already Exist !!!", req);
+            }catch(ApplicationException ae) {
+                ae.printStackTrace();
+                ServletUtility.handleException(ae, req, resp);
+                return;
+            }
+        }
+        else if(OP_CANCEL.equalsIgnoreCase(op)) {
+        	 ServletUtility.redirect(ORSView.USER_LIST_CTL, req, resp);
+        	 return;
+        }
+        ServletUtility.forward(getView(), req, resp);
     }
 
 

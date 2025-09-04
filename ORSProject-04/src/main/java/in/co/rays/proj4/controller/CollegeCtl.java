@@ -65,6 +65,7 @@ public class CollegeCtl extends BaseCtl {
 	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
 		CollegeBean bean = new CollegeBean();
+		bean.setId(DataUtility.getLong(request.getParameter("id")));
 		bean.setName(DataUtility.getString(request.getParameter("name")));
 		bean.setAddress(DataUtility.getString(request.getParameter("address")));
 		bean.setState(DataUtility.getString(request.getParameter("state")));
@@ -76,16 +77,28 @@ public class CollegeCtl extends BaseCtl {
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
-		ServletUtility.forward(getView(), req, resp);
+		Long id = DataUtility.getLong(req.getParameter("id"));
+    	CollegeModel model = new CollegeModel();
+    	if(id>0) {
+    		try {
+				CollegeBean bean = model.findByPk(id);
+				ServletUtility.setBean(bean, req);
+			} catch (ApplicationException e) {
+				e.printStackTrace();
+				ServletUtility.handleException(e, req, resp);
+				return;
+			}
+    	}
+        ServletUtility.forward(getView(), req, resp);
 	}
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String op = DataUtility.getString(req.getParameter("operation"));
-		CollegeBean bean = (CollegeBean) populateBean(req);
+		
 		CollegeModel model = new CollegeModel();
 		if(RoleCtl.OP_SAVE.equalsIgnoreCase(op)) {
+			CollegeBean bean = (CollegeBean) populateBean(req);
 			try {
 				model.addCollege(bean);
 				ServletUtility.setSuccessMessage("College Added Successfully !!!", req);
@@ -101,7 +114,26 @@ public class CollegeCtl extends BaseCtl {
 		}else if(RoleCtl.OP_RESET.equalsIgnoreCase(op)){
 			ServletUtility.redirect(ORSView.COLLEGE_CTL,req, resp);
 			return;
-		}
+		}else if(OP_UPDATE.equalsIgnoreCase(op)) {
+			CollegeBean bean = (CollegeBean) populateBean(req);
+	       	try {
+	               model.updateCollege(bean);
+	               ServletUtility.setBean(bean, req);
+	               ServletUtility.setSuccessMessage("College Updated SuccessFully !!!", req);
+	           }catch(DuplicateRecordException dre) {
+	               ServletUtility.setBean(bean, req);
+	               ServletUtility.setErrorMessage("College Name Already Exist !!!", req);
+	           }catch(ApplicationException ae) {
+	               ae.printStackTrace();
+	               ServletUtility.handleException(ae, req, resp);
+	               return;
+	           }
+	       }
+	       else if(OP_CANCEL.equalsIgnoreCase(op)) {
+	       	 ServletUtility.redirect(ORSView.COLLEGE_LIST_CTL, req, resp);
+	       	 return;
+	       }
+	       ServletUtility.forward(getView(), req, resp);
 	}
 
 	@Override

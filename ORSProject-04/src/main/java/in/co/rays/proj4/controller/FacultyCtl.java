@@ -40,7 +40,7 @@ public class FacultyCtl extends BaseCtl{
 	            request.setAttribute("subjectList", subjectList);
 	            request.setAttribute("collegeList", collegeList);
 	        } catch (ApplicationException e) {
-	            throw new RuntimeException(e);
+	           e.printStackTrace();
 	        }
 	    }
 
@@ -130,6 +130,7 @@ public class FacultyCtl extends BaseCtl{
 	    @Override
 	    protected BaseBean populateBean(HttpServletRequest request) {
 	        FacultyBean bean = new FacultyBean();
+	        bean.setId(DataUtility.getLong(request.getParameter("id")));
 	        bean.setFirstName(DataUtility.getString(request.getParameter("firstName")));
 	        bean.setLastName(DataUtility.getString(request.getParameter("lastName")));
 	        bean.setEmail(DataUtility.getString(request.getParameter("email")));
@@ -146,16 +147,28 @@ public class FacultyCtl extends BaseCtl{
 
 	    @Override
 	    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	    	Long id = DataUtility.getLong(req.getParameter("id"));
+	    	  FacultyModel model = new FacultyModel();
+	    	if(id>0) {
+	    		try {
+	    			FacultyBean bean = model.findByPk(id);
+					ServletUtility.setBean(bean, req);
+				} catch (ApplicationException e) {
+					e.printStackTrace();
+					ServletUtility.handleException(e, req, resp);
+					return;
+				}
+	    	}
 	        ServletUtility.forward(getView(), req, resp);
 	    }
 
 	    @Override
 	    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 	        String op = DataUtility.getString(req.getParameter("operation"));
+	        FacultyModel model = new FacultyModel();
 	        if(FacultyCtl.OP_SAVE.equalsIgnoreCase(op)) {
 	            FacultyBean bean = (FacultyBean) populateBean(req);
 	            try {
-	                FacultyModel model = new FacultyModel();
 	                model.addFaculty(bean);
 	                ServletUtility.setBean(bean, req);
 	                ServletUtility.setSuccessMessage("Faculty Added SuccessFully !!!", req);
@@ -170,7 +183,26 @@ public class FacultyCtl extends BaseCtl{
 	        }else if(OP_RESET.equalsIgnoreCase(op)) {
 	            ServletUtility.redirect(ORSView.FACULTY_CTL, req, resp);
 	            return;
-	        }
+	        }else if(OP_UPDATE.equalsIgnoreCase(op)) {
+	        	FacultyBean bean = (FacultyBean) populateBean(req);
+		       	try {
+		               model.updateFaculty(bean);
+		               ServletUtility.setBean(bean, req);
+		               ServletUtility.setSuccessMessage("Faculty Updated SuccessFully !!!", req);
+		           }catch(DuplicateRecordException dre) {
+		               ServletUtility.setBean(bean, req);
+		               ServletUtility.setErrorMessage("Faculty Already Exist !!!", req);
+		           }catch(ApplicationException ae) {
+		               ae.printStackTrace();
+		               ServletUtility.handleException(ae, req, resp);
+		               return;
+		           }
+		       }
+		       else if(OP_CANCEL.equalsIgnoreCase(op)) {
+		       	 ServletUtility.redirect(ORSView.FACULTY_LIST_CTL, req, resp);
+		       	 return;
+		       }
+		       ServletUtility.forward(getView(), req, resp);
 	    }
 
 
