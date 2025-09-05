@@ -76,10 +76,11 @@ public class TimetableCtl extends BaseCtl {
 	        } else if (!DataValidator.isDate(request.getParameter("examDate"))) {
 	            request.setAttribute("examDate", PropertyReader.getValue("error.date", "ExamDate"));
 	            pass = false;
-	        }else if (!DataValidator.isSunday(request.getParameter("examDate"))) {
-	            request.setAttribute("examDate", PropertyReader.getValue("error.date", "Exam Should not be on Sunday "));
-	            pass = false;
 	        }
+//	        }else if (!DataValidator.isSunday(request.getParameter("examDate"))) {
+//	            request.setAttribute("examDate", PropertyReader.getValue("error.date", "Exam Should not be on Sunday "));
+//	            pass = false;
+//	        }
 	        
 	        
 	        if(DataValidator.isNull(request.getParameter("examTime"))){
@@ -132,11 +133,28 @@ public class TimetableCtl extends BaseCtl {
 	        TimetableModel model = new TimetableModel();
 	        if(TimetableCtl.OP_SAVE.equalsIgnoreCase(op)) {
 	            TimetableBean bean = (TimetableBean) populateBean(req);
+	            TimetableBean bean1;
+	            TimetableBean bean2;
+	            TimetableBean bean3;
+	            
 	            
 	            try {
-	                model.addTimetable(bean);
-	                ServletUtility.setBean(bean, req);
-	                ServletUtility.setSuccessMessage("Timetable Added SuccessFully !!!", req);
+	            	bean1 = model.checkByCourseName(bean.getCourseId(), bean.getExamDate());
+
+					bean2 = model.checkBySubjectName(bean.getCourseId(), bean.getSubjectId(), bean.getExamDate());
+
+					bean3 = model.checkBySemester(bean.getCourseId(), bean.getSubjectId(), bean.getSemester(),
+							bean.getExamDate());
+
+					if (bean1 == null && bean2 == null && bean3 == null) {
+						long pk = model.addTimetable(bean);
+						ServletUtility.setBean(bean, req);
+						ServletUtility.setSuccessMessage("Timetable added successfully", req);
+					} else {
+						bean = (TimetableBean) populateBean(req);
+						ServletUtility.setBean(bean, req);
+						ServletUtility.setErrorMessage("Timetable already exist!", req);
+					}
 	            }catch(DuplicateRecordException dre) {
 	                ServletUtility.setBean(bean, req);
 	                ServletUtility.setErrorMessage(" Already Exist !!!", req);
