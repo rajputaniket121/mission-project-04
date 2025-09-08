@@ -123,7 +123,7 @@ public class UserRegistrationCtl extends BaseCtl {
 			UserBean bean = (UserBean) populateBean(req);
 			try {
 				UserModel model = new UserModel();
-				model.addUser(bean);
+				model.registerUser(bean);
 				ServletUtility.setBean(bean, req);
 				ServletUtility.setSuccessMessage("User Registration SuccessFully !!!", req);
 			}catch(DuplicateRecordException dre) {

@@ -110,20 +110,19 @@ public class MyProfileCtl extends BaseCtl {
 			 bean = model.findByPk(bean.getId());
 			 ServletUtility.setSuccessMessage("Information Updated Successfully", req);
 			 ServletUtility.setBean(bean, req);
-			 ServletUtility.forward(getView(), req, resp);
+			
 			} catch (DuplicateRecordException e) {
 				ServletUtility.setBean(bean, req);
 				ServletUtility.setErrorMessage("Duplicate Login Id ", req);
-				ServletUtility.forward(getView(), req, resp);
 			}catch(ApplicationException ae) {
 				ae.printStackTrace();
 				ServletUtility.handleException(ae, req, resp);
-				ServletUtility.forward(getView(), req, resp);
 			}
-		} else if (OP_CHANGE_PASSWORD.equalsIgnoreCase(op)){
-			ServletUtility.forward(ORSView.MY_PROFILE_CTL, req, resp);
+		} else if (MyProfileCtl.OP_CHANGE_PASSWORD.equalsIgnoreCase(op)){
+			ServletUtility.redirect(ORSView.CHANGE_PASSWORD_CTL, req, resp);
 			return;
 		}
+		 ServletUtility.forward(getView(), req, resp);
 	}
 
 	@Override

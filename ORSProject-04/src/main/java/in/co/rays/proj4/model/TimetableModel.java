@@ -432,5 +432,31 @@ public class TimetableModel {
 		}
 		return pk;
 	}
+	
+	
+	public Long getTest(Long courseId,String semester,Date examDate,String examTime) throws DatabaseException {
+		Connection conn = null;
+		Long count = 2l;
+		try {
+			conn = JDBCDataSource.getConnection();
+			PreparedStatement pstmt = conn.prepareStatement("SELECT COUNT(*) FROM st_timetable WHERE course_id = ?  AND semester = ?  AND exam_date = ?  AND exam_time = ?");
+			pstmt.setLong(1, courseId);
+			pstmt.setString(2, semester);
+			pstmt.setDate(3, new java.sql.Date(examDate.getTime()));
+			pstmt.setString(4, examTime);
+			
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				count = rs.getLong(1);
+			}
+			pstmt.close();
+			rs.close();
+		} catch (Exception e) {
+			throw new DatabaseException("Exception in Marksheet getting PK "+e.getMessage());
+		} finally {
+			JDBCDataSource.closeConnection(conn);
+		}
+		return count;
+	}
 
 }

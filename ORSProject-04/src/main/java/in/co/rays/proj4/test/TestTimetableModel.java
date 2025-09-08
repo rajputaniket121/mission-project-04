@@ -9,18 +9,20 @@ import java.util.List;
 
 import in.co.rays.proj4.bean.TimetableBean;
 import in.co.rays.proj4.exception.ApplicationException;
+import in.co.rays.proj4.exception.DatabaseException;
 import in.co.rays.proj4.exception.DuplicateRecordException;
 import in.co.rays.proj4.model.TimetableModel;
 
 public class TestTimetableModel {
 	
-	public static void main(String[] args) throws ParseException, ApplicationException, DuplicateRecordException  {
-		testAddTimetable();
+	public static void main(String[] args) throws ParseException, ApplicationException, DuplicateRecordException, DatabaseException  {
+		//testAddTimetable();
 		//testUpdateTimetable();
 		//testDeleteTimetable();
 		//testFindByPk();
 		//testSearch();
-		testList();
+		//testList();
+		test();
 	}
 	
 	
@@ -128,6 +130,19 @@ public class TestTimetableModel {
 			System.out.println(bean.getCreatedDateTime());
 			System.out.println(bean.getModifiedDateTime());
 		}
+	}
+	
+	public static void test() throws ParseException, DatabaseException {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+		Long courseId = 1L;
+        String semester = "4";
+        Date examDate = sdf.parse("2000-09-12");// today's date
+        String examTime = "12:00 PM to 03:00 PM";
+        TimetableModel model = new TimetableModel();
+        Long result =  model.getTest(courseId, semester, examDate, examTime);
+        System.out.println(result);
+        
+        
 	}
 
 }
