@@ -67,7 +67,7 @@
                     <th width="25%">Name</th>
                     <th width="10%">Physics</th>
                     <th width="10%">Chemistry</th>
-                    <th width="10%">Maths</th>
+                    <th width="10%">Math's</th>
                     <th width="10%">Total</th>
                     <th width="10%">Percentage (%)</th>
                     <th width="5%">Edit</th>

@@ -25,7 +25,7 @@ public class ServletUtility {
 		response.sendRedirect(page);
 	}
 
-	public static String getErrorMessage(String key, HttpServletRequest request) {  //Used for Form errors
+	public static String getErrorMessage(String key, HttpServletRequest request) {  //Used for input errors
 
 		String val = (String) request.getAttribute(key);
 		if (val == null) {
@@ -78,7 +78,7 @@ public class ServletUtility {
 		return (BaseBean) request.getAttribute("bean");
 	}
 
-	public static String getParameter(String property, HttpServletRequest request) {
+	public static String getParameter(String property, HttpServletRequest request) { //Used in timetable to get login only used there
 		String val = (String) request.getParameter(property);
 		if (val == null) {
 			return "";

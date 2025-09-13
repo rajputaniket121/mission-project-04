@@ -6,12 +6,11 @@ public class PropertyReader {
 
 	private static ResourceBundle rb = ResourceBundle.getBundle("in.co.rays.proj4.bundle.system");
 
-	public static String getValue(String key) { // key = error.require
-
+	public static String getValue(String key) { // key = email.login
 		String val = null;
 
 		try {
-			val = rb.getString(key); //value =  {0} is required
+			val = rb.getString(key); //value =  rajputaniket121@gmail.com
 		} catch (Exception e) {
 			val = key;
 		}
