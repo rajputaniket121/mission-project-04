@@ -106,9 +106,9 @@ public class UserListCtl extends BaseCtl {
 			return;
 			
 		}else if(OP_DELETE.equalsIgnoreCase(op)) {
-			pageNo=1;
 			String[] ids = req.getParameterValues("ids");	
 			if(ids!=null && ids.length>0) {
+				pageNo=1;
 				UserBean deleteBean = new UserBean();
 				for(String id  : ids) {
 					deleteBean.setId(DataUtility.getLong(id));
