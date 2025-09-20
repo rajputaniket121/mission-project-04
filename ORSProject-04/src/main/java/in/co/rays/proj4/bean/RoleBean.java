@@ -5,6 +5,8 @@ public class RoleBean extends BaseBean{
 	public static final Long ADMIN = 1l;
 	public static final Long STUDENT = 2l;
 	public static final Long USER = 3l;
+	public static final Long COLLEGE = 4l; 
+	public static final Long FACULTY = 5l; 
 	
 	private String name;
 	private String description;
@@ -26,12 +28,10 @@ public class RoleBean extends BaseBean{
 	}
 	@Override
 	public String getKey() {
-		// TODO Auto-generated method stub
 		return id+"";
 	}
 	@Override
 	public String getValue() {
-		// TODO Auto-generated method stub
 		return name;
 	}
 	

@@ -93,7 +93,7 @@
                 <tr>
                     <td style="text-align: center;">
                         <input type="checkbox" class="case" name="ids" value="<%=bean.getId()%>"
-                            <%= (user.getId() == bean.getId() || bean.getRoleId() == RoleBean.ADMIN) ? "disabled" : "" %>>
+                            <%= (userBean.getId() == bean.getId() || bean.getRoleId() == RoleBean.ADMIN) ? "disabled" : "" %>>
                     </td>
                     <td style="text-align: center;"><%=index++%></td>
                     <td style="text-align: center; text-transform: capitalize;"><%=bean.getFirstName()%></td>
@@ -105,7 +105,7 @@
                     <td style="text-align: center; text-transform: capitalize;"><%=roleBean.getName()%></td>
                     <td style="text-align: center;">
                         <a href="<%=ORSView.USER_CTL%>?id=<%=bean.getId()%>" 
-                           <%= (user.getId() == bean.getId() || bean.getRoleId() == RoleBean.ADMIN) ? "onclick='return false;'" : "" %>>Edit</a>
+                           <%= (userBean.getId() == bean.getId() || bean.getRoleId() == RoleBean.ADMIN) ? "onclick='return false;'" : "" %>>Edit</a>
                     </td>
                 </tr>
 
@@ -148,5 +148,6 @@
             %>
         </form>
     </div>
+    <%@include file="Footer.jsp"%>
 </body>
 </html>

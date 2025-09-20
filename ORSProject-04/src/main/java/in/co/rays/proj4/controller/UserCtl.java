@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "UserCtl",urlPatterns = {"/UserCtl"})
+@WebServlet(name = "UserCtl",urlPatterns = {"/ctl/UserCtl"})
 public class UserCtl extends BaseCtl{
 
     @Override

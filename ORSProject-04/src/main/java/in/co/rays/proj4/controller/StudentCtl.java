@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-@WebServlet(name = "StudentCtl",urlPatterns = {"/StudentCtl"})
+@WebServlet(name = "StudentCtl",urlPatterns = {"/ctl/StudentCtl"})
 public class StudentCtl extends  BaseCtl{
 
     @Override

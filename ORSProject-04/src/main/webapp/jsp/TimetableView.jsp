@@ -117,7 +117,7 @@
                 
                 <tr>
 					<th align="left" >Date of Birth<span style="color: red">*</span></th>
-					<td><input style="width: 100%" type="date" name="examDate"
+					<td><input style="width: 100%" type="text" id="udate" name="examDate"
 						value="<%=DataUtility.getDateString(bean.getExamDate())%>"></td>
 					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("examDate", request)%></font></td>
 				</tr>
@@ -178,5 +178,6 @@
             </table>
         </div>
     </form>
+    <%@include file="Footer.jsp"%>
 </body>
 </html>

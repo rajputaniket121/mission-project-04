@@ -123,5 +123,6 @@
             </table>
         </form>
     </div>
+    <%@include file="Footer.jsp"%>
 </body>
 </html>
