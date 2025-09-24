@@ -11,30 +11,30 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import in.co.rays.proj4.bean.BaseBean;
-import in.co.rays.proj4.bean.PatientBean;
+import in.co.rays.proj4.bean.DoctorBean;
 import in.co.rays.proj4.exception.ApplicationException;
-import in.co.rays.proj4.model.PatientModel;
+import in.co.rays.proj4.model.DoctorModel;
 import in.co.rays.proj4.util.DataUtility;
 import in.co.rays.proj4.util.PropertyReader;
 import in.co.rays.proj4.util.ServletUtility;
 
-@WebServlet(name = "PatientListCtl",urlPatterns = {"/ctl/PatientListCtl"})
-public class PatientListCtl extends BaseCtl{
-	
+@WebServlet(name = "DoctorListCtl",urlPatterns = {"/ctl/DoctorListCtl"})
+public class DoctorListCtl extends BaseCtl{
+
 	@Override
 	protected void preload(HttpServletRequest request) {
 		
-		PatientModel model = new PatientModel();
+		DoctorModel model = new DoctorModel();
 		try {
-			List<PatientBean> patientDeceaseList =  model.list();
-			HashMap<String, String> deceaseMap = new HashMap<String, String>();
-			Iterator<PatientBean> it =  patientDeceaseList.iterator();
+			List<DoctorBean> patientExpertiesList =  model.list();
+			HashMap<String, String> expertiesMap = new HashMap<String, String>();
+			Iterator<DoctorBean> it =  patientExpertiesList.iterator();
 			
 			while(it.hasNext()) {
-				PatientBean bean = it.next();
-				deceaseMap.put(bean.getDecease(), bean.getDecease());
+				DoctorBean bean = it.next();
+				expertiesMap.put(bean.getExperties(), bean.getExperties());
 			}
-			request.setAttribute("deceaseMap", deceaseMap);
+			request.setAttribute("expertiesMap", expertiesMap);
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 		}
@@ -43,10 +43,10 @@ public class PatientListCtl extends BaseCtl{
 	
 	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
-		PatientBean bean = new PatientBean();
+		DoctorBean bean = new DoctorBean();
 		bean.setName(DataUtility.getString(request.getParameter("name")));
-		bean.setDateOfVisit(DataUtility.getDate(request.getParameter("dateOfVisit")));
-		bean.setDecease(DataUtility.getString(request.getParameter("decease")));
+		bean.setDob(DataUtility.getDate(request.getParameter("dob")));
+		bean.setExperties(DataUtility.getString(request.getParameter("experties")));
 		return bean;
 	}
 	
@@ -54,11 +54,11 @@ public class PatientListCtl extends BaseCtl{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		int pageNo = 1;
 		int pageSize = DataUtility.getInt(PropertyReader.getValue("page.size"));
-		PatientBean bean = (PatientBean) populateBean(req);
-		PatientModel model = new PatientModel();
+		DoctorBean bean = (DoctorBean) populateBean(req);
+		DoctorModel model = new DoctorModel();
 		try {
-			List<PatientBean> list= model.search(bean, pageNo, pageSize);
-			List<PatientBean> next= model.search(bean, pageNo+1, pageSize);
+			List<DoctorBean> list= model.search(bean, pageNo, pageSize);
+			List<DoctorBean> next= model.search(bean, pageNo+1, pageSize);
 			if(list.isEmpty() || list==null) {
 				ServletUtility.setErrorMessage("No Records found", req);
 			}
@@ -78,16 +78,16 @@ public class PatientListCtl extends BaseCtl{
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		List<PatientBean> list = null;
-		List<PatientBean> next = null;
+		List<DoctorBean> list = null;
+		List<DoctorBean> next = null;
 		
 		int pageNo = DataUtility.getInt(req.getParameter("pageNo"));
 		int pageSize = DataUtility.getInt(req.getParameter("pageSize"));
 		
 		pageNo = (pageNo==0)? 1 : pageNo;
 		pageSize = (pageSize==0)? (DataUtility.getInt(PropertyReader.getValue("page.size")))  : pageSize;
-		PatientBean bean = (PatientBean) populateBean(req);
-		PatientModel model = new PatientModel();
+		DoctorBean bean = (DoctorBean) populateBean(req);
+		DoctorModel model = new DoctorModel();
 		
 		String op = DataUtility.getString(req.getParameter("operation"));
 		
@@ -107,20 +107,20 @@ public class PatientListCtl extends BaseCtl{
 			
 			
 		} else if(OP_RESET.equalsIgnoreCase(op)) {
-			ServletUtility.redirect(ORSView.PATIENT_LIST_CTL, req, resp);
+			ServletUtility.redirect(ORSView.DOCTOR_LIST_CTL, req, resp);
 			return;
 		}else if(OP_NEW.equalsIgnoreCase(op)) {
-			ServletUtility.redirect(ORSView.PATIENT_CTL, req, resp);
+			ServletUtility.redirect(ORSView.DOCTOR_CTL, req, resp);
 			return;
 			
 		}else if(OP_DELETE.equalsIgnoreCase(op)) {
 			pageNo=1;
 			String[] ids = req.getParameterValues("ids");	
 			if(ids!=null && ids.length>0) {
-				PatientBean deleteBean = new PatientBean();
+				DoctorBean deleteBean = new DoctorBean();
 				for(String id  : ids) {
 					deleteBean.setId(DataUtility.getLong(id));
-					model.deletePatient(deleteBean.getId());
+					model.deleteDoctor(deleteBean.getId());
 					ServletUtility.setSuccessMessage("Deleted Successfully !!!", req);
 				}
 			}else {
@@ -128,7 +128,7 @@ public class PatientListCtl extends BaseCtl{
 			}
 			
 		}else if(OP_BACK.equalsIgnoreCase(op)) {
-			ServletUtility.redirect(ORSView.PATIENT_LIST_CTL, req, resp);
+			ServletUtility.redirect(ORSView.DOCTOR_LIST_CTL, req, resp);
 			return;
 		}
 		
@@ -153,7 +153,6 @@ public class PatientListCtl extends BaseCtl{
 	
 	@Override
 	protected String getView() {
-		return ORSView.PATIENT_LIST_VIEW;
+		return ORSView.DOCTOR_LIST_VIEW;
 	}
-
 }

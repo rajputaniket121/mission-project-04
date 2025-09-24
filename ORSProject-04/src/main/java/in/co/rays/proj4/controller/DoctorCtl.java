@@ -7,18 +7,17 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import in.co.rays.proj4.bean.BaseBean;
-import in.co.rays.proj4.bean.PatientBean;
+import in.co.rays.proj4.bean.DoctorBean;
 import in.co.rays.proj4.exception.ApplicationException;
 import in.co.rays.proj4.exception.DuplicateRecordException;
-import in.co.rays.proj4.model.PatientModel;
+import in.co.rays.proj4.model.DoctorModel;
 import in.co.rays.proj4.util.DataUtility;
 import in.co.rays.proj4.util.DataValidator;
 import in.co.rays.proj4.util.PropertyReader;
 import in.co.rays.proj4.util.ServletUtility;
 
-@WebServlet(name = "PatientCtl" , urlPatterns = "/ctl/PatientCtl")
-public class PatientCtl extends BaseCtl{
-	
+@WebServlet(name = "DoctorCtl",urlPatterns = "/ctl/DoctorCtl")
+public class DoctorCtl extends BaseCtl{
 	@Override
     protected boolean validate(HttpServletRequest request) {
         boolean pass = true;
@@ -32,15 +31,15 @@ public class PatientCtl extends BaseCtl{
             request.setAttribute("name", PropertyReader.getValue("error.require","Name"));
             pass = false;
         } else if(!DataValidator.isName(request.getParameter("name"))) {
-            request.setAttribute("name", "Invalid Patient Name");
+            request.setAttribute("name", "Invalid Doctor Name");
             pass = false;
         }
 
-        if(DataValidator.isNull(request.getParameter("dateOfVisit"))) {
-            request.setAttribute("dateOfVisit", PropertyReader.getValue("error.require","Date Of Visit"));
+        if(DataValidator.isNull(request.getParameter("dob"))) {
+            request.setAttribute("dob", PropertyReader.getValue("error.require","Date Of Birth"));
             pass = false;
-        } else if(!DataValidator.isDate(request.getParameter("dateOfVisit"))) {
-            request.setAttribute("dateOfVisit", PropertyReader.getValue("error.date", "Date of Visit"));
+        } else if(!DataValidator.isDate(request.getParameter("dob"))) {
+            request.setAttribute("dob", PropertyReader.getValue("error.date", "Date of Birth"));
             pass = false;
         }
         
@@ -55,8 +54,8 @@ public class PatientCtl extends BaseCtl{
             pass = false;
         }
 
-        if(DataValidator.isNull(request.getParameter("decease"))){
-            request.setAttribute("decease", PropertyReader.getValue("error.require", "Decease "));
+        if(DataValidator.isNull(request.getParameter("experties"))){
+            request.setAttribute("experties", PropertyReader.getValue("error.require", "Experties "));
             pass = false;
         }
 
@@ -65,12 +64,12 @@ public class PatientCtl extends BaseCtl{
 
     @Override
     protected BaseBean populateBean(HttpServletRequest request) {
-        PatientBean bean = new PatientBean();
+        DoctorBean bean = new DoctorBean();
         bean.setId(DataUtility.getLong(request.getParameter("id")));
         bean.setName(DataUtility.getString(request.getParameter("name")));
-        bean.setDateOfVisit(DataUtility.getDate(request.getParameter("dateOfVisit")));
+        bean.setDob(DataUtility.getDate(request.getParameter("dob")));
         bean.setMobile(DataUtility.getString(request.getParameter("mobile")));
-        bean.setDecease(DataUtility.getString(request.getParameter("decease")));
+        bean.setExperties(DataUtility.getString(request.getParameter("experties")));
         populateDTO(bean, request);
         return bean;
     }
@@ -78,10 +77,10 @@ public class PatientCtl extends BaseCtl{
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     	Long id = DataUtility.getLong(req.getParameter("id"));
-    	PatientModel model = new PatientModel();
+    	DoctorModel model = new DoctorModel();
     	if(id>0) {
     		try {
-    			PatientBean bean = model.findByPk(id);
+    			DoctorBean bean = model.findByPk(id);
 				ServletUtility.setBean(bean, req);
 			} catch (ApplicationException e) {
 				e.printStackTrace();
@@ -95,41 +94,41 @@ public class PatientCtl extends BaseCtl{
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String op = DataUtility.getString(req.getParameter("operation"));
-        PatientModel model = new PatientModel();
-        if(PatientCtl.OP_SAVE.equalsIgnoreCase(op)) {
-            PatientBean bean = (PatientBean) populateBean(req);
+        DoctorModel model = new DoctorModel();
+        if(DoctorCtl.OP_SAVE.equalsIgnoreCase(op)) {
+            DoctorBean bean = (DoctorBean) populateBean(req);
             try {
-                model.addPatient(bean);
+                model.addDoctor(bean);
                 ServletUtility.setBean(bean, req);
-                ServletUtility.setSuccessMessage("Patient Added SuccessFully !!!", req);
+                ServletUtility.setSuccessMessage("Doctor Added SuccessFully !!!", req);
             }catch(DuplicateRecordException dre) {
                 ServletUtility.setBean(bean, req);
-                ServletUtility.setErrorMessage("Patient Already Exist !!!", req);
+                ServletUtility.setErrorMessage("Doctor Already Exist !!!", req);
             }catch(ApplicationException ae) {
                 ae.printStackTrace();
                 ServletUtility.handleException(ae, req, resp);
                 return;
             }
-        }else if(PatientCtl.OP_RESET.equalsIgnoreCase(op)) {
-            ServletUtility.redirect(ORSView.PATIENT_CTL, req, resp);
+        }else if(DoctorCtl.OP_RESET.equalsIgnoreCase(op)) {
+            ServletUtility.redirect(ORSView.DOCTOR_CTL, req, resp);
             return;
-        }else if(PatientCtl.OP_UPDATE.equalsIgnoreCase(op)) {
-        	PatientBean bean = (PatientBean) populateBean(req);
+        }else if(DoctorCtl.OP_UPDATE.equalsIgnoreCase(op)) {
+        	DoctorBean bean = (DoctorBean) populateBean(req);
 	       	try {
-	               model.updatePatient(bean);
+	               model.updateDoctor(bean);
 	               ServletUtility.setBean(bean, req);
-	               ServletUtility.setSuccessMessage("Patient Updated SuccessFully !!!", req);
+	               ServletUtility.setSuccessMessage("Doctor Updated SuccessFully !!!", req);
 	           }catch(DuplicateRecordException dre) {
 	               ServletUtility.setBean(bean, req);
-	               ServletUtility.setErrorMessage("Patient Already Exist !!!", req);
+	               ServletUtility.setErrorMessage("Doctor Already Exist !!!", req);
 	           }catch(ApplicationException ae) {
 	               ae.printStackTrace();
 	               ServletUtility.handleException(ae, req, resp);
 	               return;
 	           }
 	       }
-	       else if(PatientCtl.OP_CANCEL.equalsIgnoreCase(op)) {
-	       	 ServletUtility.redirect(ORSView.PATIENT_LIST_CTL, req, resp);
+	       else if(DoctorCtl.OP_CANCEL.equalsIgnoreCase(op)) {
+	       	 ServletUtility.redirect(ORSView.DOCTOR_LIST_CTL, req, resp);
 	       	 return;
 	       }
 	       ServletUtility.forward(getView(), req, resp);
@@ -137,7 +136,6 @@ public class PatientCtl extends BaseCtl{
 	
 	@Override
 	protected String getView() {
-		return ORSView.PATIENT_VIEW;
+		return ORSView.DOCTOR_VIEW;
 	}
-
 }

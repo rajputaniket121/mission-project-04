@@ -45,34 +45,33 @@ public final class JDBCDataSource {
 	}
 
 	public static void closeConnection(Connection conn) {
-	    try {
-	        if (conn != null) {
-	            conn.close();
-	        }
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
+		try {
+			if (conn != null) {
+				conn.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void closeConnection(Connection conn, Statement stmt) {
-	    closeConnection(conn, stmt, null);
+		closeConnection(conn, stmt, null);
 	}
 
 	public static void closeConnection(Connection conn, Statement stmt, ResultSet rs) {
-	    try {
-	        if (rs != null) {
-	            rs.close();
-	        }
-	        if (stmt != null) {
-	            stmt.close();
-	        }
-	        if (conn != null) {
-	            conn.close();
-	        }
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
+		try {
+			if (rs != null) {
+				rs.close();
+			}
+			if (stmt != null) {
+				stmt.close();
+			}
+			if (conn != null) {
+				conn.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
-
 
 }

@@ -100,10 +100,14 @@
  	}
 
  		if (userBean.getRoleId() == RoleBean.ADMIN) {
- %> | <a href="doc/index.jsp" target="blank">Java Doc</a> | <a
+ %> | <a href="doc/index.html" target="blank">Java Doc</a> | <a
  	 href="<%=ORSView.PATIENT_CTL%>" target="blank">Add Patient</a>
  	 | <a
  	 href="<%=ORSView.PATIENT_LIST_CTL%>" target="blank">Patient List</a>
+ 	 | <a
+ 	 href="<%=ORSView.DOCTOR_CTL%>" target="blank">Add Doctor</a>
+ 	 | <a
+ 	 href="<%=ORSView.DOCTOR_LIST_CTL%>" target="blank">Doctor List</a>
  <%
  	}
  	} else {
