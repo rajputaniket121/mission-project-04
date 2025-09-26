@@ -30,6 +30,8 @@
 					</font>
 				</H3>
 			</div>
+			
+			<input type="hidden" name="uri" value=<%=request.getAttribute("uri") %>>
 
 			<table>
 				<tr>
