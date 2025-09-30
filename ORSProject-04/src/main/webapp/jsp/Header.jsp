@@ -1,3 +1,4 @@
+<%@page import="in.co.rays.proj4.util.PropertyReader"%>
 <%@page import="in.co.rays.proj4.bean.UserBean"%>
 <%@page import="in.co.rays.proj4.controller.LoginCtl"%>
 <%@page import="in.co.rays.proj4.bean.RoleBean"%>
@@ -28,6 +29,7 @@
 		welcomeMsg += userBean.getFirstName() + " (" + role + ")";
 	} else {
 		welcomeMsg += "Guest";
+		
 	}
 %>
 
@@ -111,7 +113,9 @@
  <%
  	}
  	} else {
- %> <a href="<%=ORSView.LOGIN_CTL%>"></a> <%
+ %> <a href="<%=ORSView.LOGIN_CTL%>"></a>
+  <%
+		 
  	}
  %></td>
 

@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import in.co.rays.proj4.util.PropertyReader;
 import in.co.rays.proj4.util.ServletUtility;
 
 @WebServlet(name = "WelcomeCtl",urlPatterns = {"/WelcomeCtl"})
@@ -20,7 +21,6 @@ public class WelcomeCtl extends BaseCtl{
 
 	@Override
 	protected String getView() {
-		// TODO Auto-generated method stub
 		return ORSView.WELCOME_VIEW;
 	}
 

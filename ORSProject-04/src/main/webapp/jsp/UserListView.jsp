@@ -1,3 +1,4 @@
+<%@page import="java.util.HashMap"%>
 <%@page import="in.co.rays.proj4.bean.RoleBean"%>
 <%@page import="in.co.rays.proj4.controller.ORSView"%>
 <%@page import="in.co.rays.proj4.util.HTMLUtility"%>
@@ -57,7 +58,18 @@
 
                         <label><b>Role : </b></label>
                         <%=HTMLUtility.getList("roleId", String.valueOf(bean.getRoleId()), roleList)%>&emsp;
+                        
+                        <label><b>Date of Birth : </b></label>
+                        <input type="text" name="dob" id="udate" placeholder="Enter Date of birth" value="<%=ServletUtility.getParameter("dob", request)%>">&emsp;
 
+						<%-- <label><b>Gender : </b></label>
+                        <%
+							HashMap<String, String> map = new HashMap<String, String>();
+							map.put("Male", "Male");
+							map.put("Female", "Female");
+						%> 
+						<%=HTMLUtility.getList("gender", ServletUtility.getParameter("gender", request) , map)%> --%>
+                        
                         <input type="submit" name="operation" value="<%=UserListCtl.OP_SEARCH%>">
                         &nbsp;
                         <input type="submit" name="operation" value="<%=UserListCtl.OP_RESET%>">
