@@ -2,7 +2,6 @@ package in.co.rays.proj4.controller;
 
 import java.io.IOException;
 import java.util.HashMap;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,60 +16,89 @@ import in.co.rays.proj4.util.DataValidator;
 import in.co.rays.proj4.util.PropertyReader;
 import in.co.rays.proj4.util.ServletUtility;
 
-@WebServlet(name = "DoctorCtl",urlPatterns = "/ctl/DoctorCtl")
-public class DoctorCtl extends BaseCtl{
-	
-	@Override
-	protected void preload(HttpServletRequest request) {
-		HashMap<String, String> expertiesMap = new HashMap<String, String>();
-		expertiesMap.put("Cardiology", "Cardiology");
-		expertiesMap.put("Dermatology", "Dermatology");
-		expertiesMap.put("Endocrinology", "Endocrinology");
-		expertiesMap.put("Family Medicine", "Family Medicine");
-		expertiesMap.put("Gastroenterology", "Gastroenterology");
-		expertiesMap.put("Hematology", "Hematology");
-		expertiesMap.put("Infectious Diseases", "Infectious Diseases");
-		expertiesMap.put("Internal Medicine", "Internal Medicine");
-		expertiesMap.put("Nephrology", "Nephrology");
-		expertiesMap.put("Neurology", "Neurology");
-		expertiesMap.put("Oncology", "Oncology");
-		expertiesMap.put("Ophthalmology", "Ophthalmology");
-		expertiesMap.put("Orthopedics", "Orthopedics");
-		expertiesMap.put("Otolaryngology", "Otolaryngology");
-		expertiesMap.put("Pediatrics", "Pediatrics");
-		expertiesMap.put("Psychiatry", "Psychiatry");
-		expertiesMap.put("Pulmonology", "Pulmonology");
-		expertiesMap.put("Radiology", "Radiology");
-		expertiesMap.put("Surgery", "Surgery");
-		expertiesMap.put("Urology", "Urology");
-		request.setAttribute("expertiesMap", expertiesMap);
-	}
-	
-	@Override
+/**
+ * DoctorCtl is a servlet controller that handles CRUD operations
+ * for Doctor records in the application.
+ *
+ * <p>
+ * It extends {@link BaseCtl} and provides functionality for:
+ * <ul>
+ *   <li>Preloading specialties (experties) for doctor form</li>
+ *   <li>Validating doctor form input</li>
+ *   <li>Populating {@link DoctorBean} from request parameters</li>
+ *   <li>Handling GET and POST requests for add, update, reset, and cancel operations</li>
+ * </ul>
+ * </p>
+ *
+ * <p>
+ * URL mapping: <code>/ctl/DoctorCtl</code>
+ * </p>
+ */
+@WebServlet(name = "DoctorCtl", urlPatterns = "/ctl/DoctorCtl")
+public class DoctorCtl extends BaseCtl {
+
+    /**
+     * Preloads specialties (experties) for doctor form dropdown.
+     *
+     * @param request the HttpServletRequest object
+     */
+    @Override
+    protected void preload(HttpServletRequest request) {
+        HashMap<String, String> expertiesMap = new HashMap<>();
+        expertiesMap.put("Cardiology", "Cardiology");
+        expertiesMap.put("Dermatology", "Dermatology");
+        expertiesMap.put("Endocrinology", "Endocrinology");
+        expertiesMap.put("Family Medicine", "Family Medicine");
+        expertiesMap.put("Gastroenterology", "Gastroenterology");
+        expertiesMap.put("Hematology", "Hematology");
+        expertiesMap.put("Infectious Diseases", "Infectious Diseases");
+        expertiesMap.put("Internal Medicine", "Internal Medicine");
+        expertiesMap.put("Nephrology", "Nephrology");
+        expertiesMap.put("Neurology", "Neurology");
+        expertiesMap.put("Oncology", "Oncology");
+        expertiesMap.put("Ophthalmology", "Ophthalmology");
+        expertiesMap.put("Orthopedics", "Orthopedics");
+        expertiesMap.put("Otolaryngology", "Otolaryngology");
+        expertiesMap.put("Pediatrics", "Pediatrics");
+        expertiesMap.put("Psychiatry", "Psychiatry");
+        expertiesMap.put("Pulmonology", "Pulmonology");
+        expertiesMap.put("Radiology", "Radiology");
+        expertiesMap.put("Surgery", "Surgery");
+        expertiesMap.put("Urology", "Urology");
+        request.setAttribute("expertiesMap", expertiesMap);
+    }
+
+    /**
+     * Validates doctor form data.
+     *
+     * @param request the HttpServletRequest object containing form data
+     * @return true if form data is valid, false otherwise
+     */
+    @Override
     protected boolean validate(HttpServletRequest request) {
         boolean pass = true;
         String op = request.getParameter("operation");
 
-        if(OP_LOG_OUT.equalsIgnoreCase(op) || OP_RESET.equalsIgnoreCase(op)) {
+        if (OP_LOG_OUT.equalsIgnoreCase(op) || OP_RESET.equalsIgnoreCase(op)) {
             return pass;
         }
 
-        if(DataValidator.isNull(request.getParameter("name"))) {
-            request.setAttribute("name", PropertyReader.getValue("error.require","Name"));
+        if (DataValidator.isNull(request.getParameter("name"))) {
+            request.setAttribute("name", PropertyReader.getValue("error.require", "Name"));
             pass = false;
-        } else if(!DataValidator.isName(request.getParameter("name"))) {
+        } else if (!DataValidator.isName(request.getParameter("name"))) {
             request.setAttribute("name", "Invalid Doctor Name");
             pass = false;
         }
 
-        if(DataValidator.isNull(request.getParameter("dob"))) {
-            request.setAttribute("dob", PropertyReader.getValue("error.require","Date Of Birth"));
+        if (DataValidator.isNull(request.getParameter("dob"))) {
+            request.setAttribute("dob", PropertyReader.getValue("error.require", "Date Of Birth"));
             pass = false;
-        } else if(!DataValidator.isDate(request.getParameter("dob"))) {
+        } else if (!DataValidator.isDate(request.getParameter("dob"))) {
             request.setAttribute("dob", PropertyReader.getValue("error.date", "Date of Birth"));
             pass = false;
         }
-        
+
         if (DataValidator.isNull(request.getParameter("mobile"))) {
             request.setAttribute("mobile", PropertyReader.getValue("error.require", "Mobile No"));
             pass = false;
@@ -82,14 +110,20 @@ public class DoctorCtl extends BaseCtl{
             pass = false;
         }
 
-        if(DataValidator.isNull(request.getParameter("experties"))){
-            request.setAttribute("experties", PropertyReader.getValue("error.require", "Experties "));
+        if (DataValidator.isNull(request.getParameter("experties"))) {
+            request.setAttribute("experties", PropertyReader.getValue("error.require", "Experties"));
             pass = false;
         }
 
         return pass;
     }
 
+    /**
+     * Populates a {@link DoctorBean} with request parameters.
+     *
+     * @param request the HttpServletRequest object
+     * @return a DoctorBean populated with form data
+     */
     @Override
     protected BaseBean populateBean(HttpServletRequest request) {
         DoctorBean bean = new DoctorBean();
@@ -102,68 +136,94 @@ public class DoctorCtl extends BaseCtl{
         return bean;
     }
 
+    /**
+     * Handles HTTP GET requests.
+     * Loads doctor data by ID if provided and forwards to doctor view.
+     *
+     * @param req the HttpServletRequest object
+     * @param resp the HttpServletResponse object
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    	Long id = DataUtility.getLong(req.getParameter("id"));
-    	DoctorModel model = new DoctorModel();
-    	if(id>0) {
-    		try {
-    			DoctorBean bean = model.findByPk(id);
-				ServletUtility.setBean(bean, req);
-			} catch (ApplicationException e) {
-				e.printStackTrace();
-				ServletUtility.handleException(e, req, resp);
-				return;
-			}
-    	}
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        Long id = DataUtility.getLong(req.getParameter("id"));
+        DoctorModel model = new DoctorModel();
+        if (id > 0) {
+            try {
+                DoctorBean bean = model.findByPk(id);
+                ServletUtility.setBean(bean, req);
+            } catch (ApplicationException e) {
+                e.printStackTrace();
+                ServletUtility.handleException(e, req, resp);
+                return;
+            }
+        }
         ServletUtility.forward(getView(), req, resp);
     }
 
+    /**
+     * Handles HTTP POST requests for saving, updating, resetting, or cancelling doctor data.
+     *
+     * @param req the HttpServletRequest object
+     * @param resp the HttpServletResponse object
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+
         String op = DataUtility.getString(req.getParameter("operation"));
         DoctorModel model = new DoctorModel();
-        if(DoctorCtl.OP_SAVE.equalsIgnoreCase(op)) {
+
+        if (OP_SAVE.equalsIgnoreCase(op)) {
             DoctorBean bean = (DoctorBean) populateBean(req);
             try {
                 model.addDoctor(bean);
                 ServletUtility.setBean(bean, req);
-                ServletUtility.setSuccessMessage("Doctor Added SuccessFully !!!", req);
-            }catch(DuplicateRecordException dre) {
+                ServletUtility.setSuccessMessage("Doctor Added Successfully !!!", req);
+            } catch (DuplicateRecordException dre) {
                 ServletUtility.setBean(bean, req);
                 ServletUtility.setErrorMessage("Doctor Already Exist !!!", req);
-            }catch(ApplicationException ae) {
+            } catch (ApplicationException ae) {
                 ae.printStackTrace();
                 ServletUtility.handleException(ae, req, resp);
                 return;
             }
-        }else if(DoctorCtl.OP_RESET.equalsIgnoreCase(op)) {
+        } else if (OP_RESET.equalsIgnoreCase(op)) {
             ServletUtility.redirect(ORSView.DOCTOR_CTL, req, resp);
             return;
-        }else if(DoctorCtl.OP_UPDATE.equalsIgnoreCase(op)) {
-        	DoctorBean bean = (DoctorBean) populateBean(req);
-	       	try {
-	               model.updateDoctor(bean);
-	               ServletUtility.setBean(bean, req);
-	               ServletUtility.setSuccessMessage("Doctor Updated SuccessFully !!!", req);
-	           }catch(DuplicateRecordException dre) {
-	               ServletUtility.setBean(bean, req);
-	               ServletUtility.setErrorMessage("Doctor Already Exist !!!", req);
-	           }catch(ApplicationException ae) {
-	               ae.printStackTrace();
-	               ServletUtility.handleException(ae, req, resp);
-	               return;
-	           }
-	       }
-	       else if(DoctorCtl.OP_CANCEL.equalsIgnoreCase(op)) {
-	       	 ServletUtility.redirect(ORSView.DOCTOR_LIST_CTL, req, resp);
-	       	 return;
-	       }
-	       ServletUtility.forward(getView(), req, resp);
+        } else if (OP_UPDATE.equalsIgnoreCase(op)) {
+            DoctorBean bean = (DoctorBean) populateBean(req);
+            try {
+                model.updateDoctor(bean);
+                ServletUtility.setBean(bean, req);
+                ServletUtility.setSuccessMessage("Doctor Updated Successfully !!!", req);
+            } catch (DuplicateRecordException dre) {
+                ServletUtility.setBean(bean, req);
+                ServletUtility.setErrorMessage("Doctor Already Exist !!!", req);
+            } catch (ApplicationException ae) {
+                ae.printStackTrace();
+                ServletUtility.handleException(ae, req, resp);
+                return;
+            }
+        } else if (OP_CANCEL.equalsIgnoreCase(op)) {
+            ServletUtility.redirect(ORSView.DOCTOR_LIST_CTL, req, resp);
+            return;
+        }
+
+        ServletUtility.forward(getView(), req, resp);
     }
-	
-	@Override
-	protected String getView() {
-		return ORSView.DOCTOR_VIEW;
-	}
+
+    /**
+     * Returns the view (JSP page) associated with this controller.
+     *
+     * @return the doctor view JSP path
+     */
+    @Override
+    protected String getView() {
+        return ORSView.DOCTOR_VIEW;
+    }
 }
