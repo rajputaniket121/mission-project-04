@@ -1,6 +1,7 @@
 package in.co.rays.proj4.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,6 +19,33 @@ import in.co.rays.proj4.util.ServletUtility;
 
 @WebServlet(name = "DoctorCtl",urlPatterns = "/ctl/DoctorCtl")
 public class DoctorCtl extends BaseCtl{
+	
+	@Override
+	protected void preload(HttpServletRequest request) {
+		HashMap<String, String> expertiesMap = new HashMap<String, String>();
+		expertiesMap.put("Cardiology", "Cardiology");
+		expertiesMap.put("Dermatology", "Dermatology");
+		expertiesMap.put("Endocrinology", "Endocrinology");
+		expertiesMap.put("Family Medicine", "Family Medicine");
+		expertiesMap.put("Gastroenterology", "Gastroenterology");
+		expertiesMap.put("Hematology", "Hematology");
+		expertiesMap.put("Infectious Diseases", "Infectious Diseases");
+		expertiesMap.put("Internal Medicine", "Internal Medicine");
+		expertiesMap.put("Nephrology", "Nephrology");
+		expertiesMap.put("Neurology", "Neurology");
+		expertiesMap.put("Oncology", "Oncology");
+		expertiesMap.put("Ophthalmology", "Ophthalmology");
+		expertiesMap.put("Orthopedics", "Orthopedics");
+		expertiesMap.put("Otolaryngology", "Otolaryngology");
+		expertiesMap.put("Pediatrics", "Pediatrics");
+		expertiesMap.put("Psychiatry", "Psychiatry");
+		expertiesMap.put("Pulmonology", "Pulmonology");
+		expertiesMap.put("Radiology", "Radiology");
+		expertiesMap.put("Surgery", "Surgery");
+		expertiesMap.put("Urology", "Urology");
+		request.setAttribute("expertiesMap", expertiesMap);
+	}
+	
 	@Override
     protected boolean validate(HttpServletRequest request) {
         boolean pass = true;

@@ -8,23 +8,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Login</title>
-<link rel="icon" type="image/png"
-	href="<%=ORSView.APP_CONTEXT%>/img/logo.png" sizes="16x16" />
+    <title>My Profile</title>
+    <link rel="icon" type="image/png" href="<%=ORSView.APP_CONTEXT%>/img/logo.png" sizes="16x16"/>
+    <script type="text/javascript">
+    
+    </script>
 </head>
 <body>
 	<form action="<%=ORSView.MY_PROFILE_CTL%>" method="post">
-		<%@ include file="Header.jsp"%>
-
+	<%@ include file="Header.jsp"%>
 		<jsp:useBean id="bean" class="in.co.rays.proj4.bean.UserBean"
 			scope="request"></jsp:useBean>
 
 		<div align="center">
 			<h1 align="center" style="margin-bottom: -15; color: navy">My Profile</h1>
 
-
-			<div style="height: 15px; margin-bottom: 12px">
+			<div style="height: 15px;">
 				<h3 align="center">
 					<font color="red"> <%=ServletUtility.getErrorMessage(request)%>
 					</font>
@@ -111,6 +110,8 @@
 			</table>
 		</div>
 	</form>
+	<br>
+	<br>
 <%@include file="Footer.jsp"%>
 </body>
 </html>

@@ -42,6 +42,9 @@
 					</font>
 				</H3>
 			</div>
+			<%
+			HashMap<String, String> expertiesMap = (HashMap<String, String>) request.getAttribute("expertiesMap");
+			%>
 
 			<input type="hidden" name="id" value="<%=bean.getId()%>"> <input
 				type="hidden" name="createdBy" value="<%=bean.getCreatedBy()%>">
@@ -76,31 +79,7 @@
 				<tr>
 					<th align="left">Experties<span style="color: red">*</span></th>
 					<td>
-						<%
-						HashMap<String, String> map = new HashMap<String, String>();
-						map.put("Cardiology", "Cardiology");
-						map.put("Dermatology", "Dermatology");
-						map.put("Endocrinology", "Endocrinology");
-						map.put("Family Medicine", "Family Medicine");
-						map.put("Gastroenterology", "Gastroenterology");
-						map.put("Hematology", "Hematology");
-						map.put("Infectious Diseases", "Infectious Diseases");
-						map.put("Internal Medicine", "Internal Medicine");
-						map.put("Nephrology", "Nephrology");
-						map.put("Neurology", "Neurology");
-						map.put("Oncology", "Oncology");
-						map.put("Ophthalmology", "Ophthalmology");
-						map.put("Orthopedics", "Orthopedics");
-						map.put("Otolaryngology", "Otolaryngology");
-						map.put("Pediatrics", "Pediatrics");
-						map.put("Psychiatry", "Psychiatry");
-						map.put("Pulmonology", "Pulmonology");
-						map.put("Radiology", "Radiology");
-						map.put("Surgery", "Surgery");
-						map.put("Urology", "Urology");
-						
-						String htmlList = HTMLUtility.getList("experties", bean.getExperties(), map);
-						%> <%=htmlList%>
+						 <%=HTMLUtility.getList("experties", bean.getExperties(), expertiesMap)%>
 					</td>
 					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("experties", request)%></font></td>
 				</tr>

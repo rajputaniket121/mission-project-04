@@ -42,6 +42,10 @@
 					</font>
 				</H3>
 			</div>
+			
+			<%
+			 HashMap<String, String> deceaseMap = (HashMap<String, String>) request.getAttribute("deceaseMap");
+			%>
 
 			<input type="hidden" name="id" value="<%=bean.getId()%>"> <input
 				type="hidden" name="createdBy" value="<%=bean.getCreatedBy()%>">
@@ -76,21 +80,7 @@
 				<tr>
 					<th align="left">Decease<span style="color: red">*</span></th>
 					<td>
-						<%
-							HashMap<String, String> map = new HashMap<String, String>();
-							map.put("Diabetes", "Diabetes");
-							map.put("Hypertension", "Hypertension");
-							map.put("Asthma", "Asthma");
-							map.put("Tuberculosis", "Tuberculosis");
-							map.put("Malaria", "Malaria");
-							map.put("Alzheimer's", "Alzheimer's");
-							map.put("Parkinson's", "Parkinson's");
-							map.put("Hepatitis", "Hepatitis");
-							map.put("Cholera", "Cholera");
-							map.put("Ebola", "Ebola");
-
-							String htmlList = HTMLUtility.getList("decease", bean.getDecease(), map);
-						%> <%=htmlList%>
+						 <%=HTMLUtility.getList("decease", bean.getDecease(), deceaseMap)%>
 					</td>
 					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("decease", request)%></font></td>
 				</tr>

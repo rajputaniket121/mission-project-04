@@ -1,6 +1,7 @@
 package in.co.rays.proj4.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,6 +19,22 @@ import in.co.rays.proj4.util.ServletUtility;
 
 @WebServlet(name = "PatientCtl" , urlPatterns = "/ctl/PatientCtl")
 public class PatientCtl extends BaseCtl{
+	
+	@Override
+	protected void preload(HttpServletRequest request) {
+		HashMap<String, String> decease = new HashMap<String, String>();
+		decease.put("Diabetes", "Diabetes");
+		decease.put("Hypertension", "Hypertension");
+		decease.put("Asthma", "Asthma");
+		decease.put("Tuberculosis", "Tuberculosis");
+		decease.put("Malaria", "Malaria");
+		decease.put("Alzheimer's", "Alzheimer's");
+		decease.put("Parkinson's", "Parkinson's");
+		decease.put("Hepatitis", "Hepatitis");
+		decease.put("Cholera", "Cholera");
+		decease.put("Ebola", "Ebola");
+		request.setAttribute("deceaseMap", decease);
+	}
 	
 	@Override
     protected boolean validate(HttpServletRequest request) {
