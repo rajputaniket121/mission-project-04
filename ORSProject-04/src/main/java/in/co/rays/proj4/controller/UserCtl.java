@@ -22,59 +22,58 @@ import org.apache.log4j.Logger;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "UserCtl",urlPatterns = {"/ctl/UserCtl"})
-public class UserCtl extends BaseCtl{
-	Logger log = Logger.getLogger(UserCtl.class);
+@WebServlet(name = "UserCtl", urlPatterns = { "/ctl/UserCtl" })
+public class UserCtl extends BaseCtl {
+    private static final Logger log = Logger.getLogger(UserCtl.class);
 
     /**
-     *in userCTl preload
+     * in userCTl preload
      */
     @Override
     protected void preload(HttpServletRequest request) {
-    	log.debug("In UserCtl Preload ");
-    	
+        log.debug("Inside preload method of UserCtl");
         RoleModel roleModel = new RoleModel();
         try {
-            List<RoleBean> roleList =  roleModel.list();
+            List<RoleBean> roleList = roleModel.list();
             request.setAttribute("roleList", roleList);
         } catch (ApplicationException e) {
-           e.printStackTrace();
+            e.printStackTrace();
         }
+        // Existing log kept as is (optional, but we won't remove)
         log.debug("Out UserCtl Preload ");
     }
 
     @Override
     protected boolean validate(HttpServletRequest request) {
-    	log.debug("In UserCtl Validate ");
+        log.debug("Inside validate method of UserCtl");
         boolean pass = true;
         String op = request.getParameter("operation");
 
-        if(OP_LOG_OUT.equalsIgnoreCase(op) || OP_RESET.equalsIgnoreCase(op)) {
+        if (OP_LOG_OUT.equalsIgnoreCase(op) || OP_RESET.equalsIgnoreCase(op)) {
             return pass;
         }
 
-        if(DataValidator.isNull(request.getParameter("firstName"))) {
-            request.setAttribute("firstName", PropertyReader.getValue("error.require","First Name"));
+        if (DataValidator.isNull(request.getParameter("firstName"))) {
+            request.setAttribute("firstName", PropertyReader.getValue("error.require", "First Name"));
             pass = false;
-        } else if(!DataValidator.isName(request.getParameter("firstName"))) {
+        } else if (!DataValidator.isName(request.getParameter("firstName"))) {
             request.setAttribute("firstName", "Invalid First Name");
             pass = false;
         }
 
-        if(DataValidator.isNull(request.getParameter("lastName"))) {
-            request.setAttribute("lastName", PropertyReader.getValue("error.require","Last Name"));
+        if (DataValidator.isNull(request.getParameter("lastName"))) {
+            request.setAttribute("lastName", PropertyReader.getValue("error.require", "Last Name"));
             pass = false;
-        }
-        else if(!DataValidator.isName(request.getParameter("lastName"))) {
+        } else if (!DataValidator.isName(request.getParameter("lastName"))) {
             request.setAttribute("lastName", "Invalid Last Name");
             pass = false;
         }
 
-        if(DataValidator.isNull(request.getParameter("login"))) {
-            request.setAttribute("login", PropertyReader.getValue("error.require","Login Id"));
+        if (DataValidator.isNull(request.getParameter("login"))) {
+            request.setAttribute("login", PropertyReader.getValue("error.require", "Login Id"));
             pass = false;
-        } else if(!DataValidator.isEmail(request.getParameter("login"))) {
-            request.setAttribute("login",PropertyReader.getValue("error.email","Login"));
+        } else if (!DataValidator.isEmail(request.getParameter("login"))) {
+            request.setAttribute("login", PropertyReader.getValue("error.email", "Login"));
             pass = false;
         }
 
@@ -94,10 +93,10 @@ public class UserCtl extends BaseCtl{
             pass = false;
         }
 
-        if(DataValidator.isNull(request.getParameter("dob"))) {
-            request.setAttribute("dob", PropertyReader.getValue("error.require","Date Of Birth"));
+        if (DataValidator.isNull(request.getParameter("dob"))) {
+            request.setAttribute("dob", PropertyReader.getValue("error.require", "Date Of Birth"));
             pass = false;
-        } else if(!DataValidator.isDate(request.getParameter("dob"))) {
+        } else if (!DataValidator.isDate(request.getParameter("dob"))) {
             request.setAttribute("dob", PropertyReader.getValue("error.date", "Date of Birth"));
             pass = false;
         }
@@ -118,12 +117,12 @@ public class UserCtl extends BaseCtl{
             request.setAttribute("mobileNo", "Invalid Mobile No");
             pass = false;
         }
-        if(DataValidator.isNull(request.getParameter("gender"))){
+        if (DataValidator.isNull(request.getParameter("gender"))) {
             request.setAttribute("gender", PropertyReader.getValue("error.require", "Gender "));
             pass = false;
         }
 
-        if(DataValidator.isNull(request.getParameter("roleId"))){
+        if (DataValidator.isNull(request.getParameter("roleId"))) {
             request.setAttribute("roleId", PropertyReader.getValue("error.require", "Role "));
             pass = false;
         }
@@ -133,7 +132,7 @@ public class UserCtl extends BaseCtl{
 
     @Override
     protected BaseBean populateBean(HttpServletRequest request) {
-    	log.debug("In UserCtl populateBean ");
+        log.debug("Inside populateBean method of UserCtl");
         UserBean bean = new UserBean();
         bean.setId(DataUtility.getLong(request.getParameter("id")));
         bean.setFirstName(DataUtility.getString(request.getParameter("firstName")));
@@ -152,73 +151,71 @@ public class UserCtl extends BaseCtl{
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    	log.debug("In UserCtl doGet ");
-    	Long id = DataUtility.getLong(req.getParameter("id"));
-    	UserModel model = new UserModel();
-    	if(id>0) {
-    		try {
-				UserBean bean = model.findByPk(id);
-				ServletUtility.setBean(bean, req);
-			} catch (ApplicationException e) {
-				e.printStackTrace();
-				ServletUtility.handleException(e, req, resp);
-				return;
-			}
-    	}
-    	log.debug("Out UserCtl doGet ");
+        log.debug("Inside doGet method of UserCtl");
+        Long id = DataUtility.getLong(req.getParameter("id"));
+        UserModel model = new UserModel();
+        if (id > 0) {
+            try {
+                UserBean bean = model.findByPk(id);
+                ServletUtility.setBean(bean, req);
+            } catch (ApplicationException e) {
+                e.printStackTrace();
+                ServletUtility.handleException(e, req, resp);
+                return;
+            }
+        }
+        log.debug("Out UserCtl doGet ");
         ServletUtility.forward(getView(), req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    	log.debug("in UserCtl doPost ");
+        log.debug("Inside doPost method of UserCtl");
         String op = DataUtility.getString(req.getParameter("operation"));
         UserModel model = new UserModel();
-        if(UserCtl.OP_SAVE.equalsIgnoreCase(op)) {
-        	 UserBean bean = (UserBean) populateBean(req);
+        if (UserCtl.OP_SAVE.equalsIgnoreCase(op)) {
+            UserBean bean = (UserBean) populateBean(req);
             try {
                 model.addUser(bean);
                 ServletUtility.setBean(bean, req);
                 ServletUtility.setSuccessMessage("User Added SuccessFully !!!", req);
-            }catch(DuplicateRecordException dre) {
+            } catch (DuplicateRecordException dre) {
                 ServletUtility.setBean(bean, req);
                 ServletUtility.setErrorMessage("Login Id Already Exist !!!", req);
-            }catch(ApplicationException ae) {
+            } catch (ApplicationException ae) {
                 ae.printStackTrace();
                 ServletUtility.handleException(ae, req, resp);
                 return;
             }
-           
-        }else if(OP_RESET.equalsIgnoreCase(op)) {
-        	 ServletUtility.redirect(ORSView.USER_CTL, req, resp);
-             return;
-        }
-        else if(OP_UPDATE.equalsIgnoreCase(op)) {
-        	 UserBean bean = (UserBean) populateBean(req);
-        	try {
+
+        } else if (OP_RESET.equalsIgnoreCase(op)) {
+            ServletUtility.redirect(ORSView.USER_CTL, req, resp);
+            return;
+        } else if (OP_UPDATE.equalsIgnoreCase(op)) {
+            UserBean bean = (UserBean) populateBean(req);
+            try {
                 model.updateUser(bean);
                 ServletUtility.setBean(bean, req);
                 ServletUtility.setSuccessMessage("User Updated SuccessFully !!!", req);
-            }catch(DuplicateRecordException dre) {
+            } catch (DuplicateRecordException dre) {
                 ServletUtility.setBean(bean, req);
                 ServletUtility.setErrorMessage("Login Id Already Exist !!!", req);
-            }catch(ApplicationException ae) {
+            } catch (ApplicationException ae) {
                 ae.printStackTrace();
                 ServletUtility.handleException(ae, req, resp);
                 return;
             }
-        }
-        else if(OP_CANCEL.equalsIgnoreCase(op)) {
-        	 ServletUtility.redirect(ORSView.USER_LIST_CTL, req, resp);
-        	 return;
+        } else if (OP_CANCEL.equalsIgnoreCase(op)) {
+            ServletUtility.redirect(ORSView.USER_LIST_CTL, req, resp);
+            return;
         }
         log.debug("Out UserCtl doPost ");
         ServletUtility.forward(getView(), req, resp);
     }
 
-
     @Override
     protected String getView() {
+        log.debug("Inside getView method of UserCtl");
         return ORSView.USER_VIEW;
     }
 }

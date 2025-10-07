@@ -1,6 +1,7 @@
 package in.co.rays.proj4.controller;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +37,8 @@ import in.co.rays.proj4.util.ServletUtility;
  * </p>
  */
 public abstract class BaseCtl extends HttpServlet {
+
+    private static final Logger log = Logger.getLogger(BaseCtl.class.getName());
 
     /**
      * Constants representing common operation buttons in forms.
@@ -76,6 +79,7 @@ public abstract class BaseCtl extends HttpServlet {
      * @return true if input is valid, false otherwise
      */
     protected boolean validate(HttpServletRequest request) {
+        log.info("Inside validate method of BaseCtl");
         return true;
     }
 
@@ -90,6 +94,7 @@ public abstract class BaseCtl extends HttpServlet {
      * @param request the HttpServletRequest object to set preloaded data
      */
     protected void preload(HttpServletRequest request) {
+        log.info("Inside preload method of BaseCtl");
     }
 
     /**
@@ -104,6 +109,7 @@ public abstract class BaseCtl extends HttpServlet {
      * @return a BaseBean populated with request data, or null if no data
      */
     protected BaseBean populateBean(HttpServletRequest request) {
+        log.info("Inside populateBean method of BaseCtl");
         return null;
     }
 
@@ -116,6 +122,7 @@ public abstract class BaseCtl extends HttpServlet {
      * @return the populated DTO
      */
     protected BaseBean populateDTO(BaseBean dto, HttpServletRequest request) {
+        log.info("Inside populateDTO method of BaseCtl");
 
         String createdBy = request.getParameter("createdBy");
         String modifiedBy = null;
@@ -160,6 +167,8 @@ public abstract class BaseCtl extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        log.info("Inside service method of BaseCtl");
 
         preload(request);
 

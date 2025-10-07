@@ -145,4 +145,6 @@ public interface ORSView {
     /** Error view and controller */
     public String ERROR_VIEW = PAGE_FOLDER + "/ErrorView.jsp";
     public String ERROR_CTL = APP_CONTEXT + "/ErrorCtl";
+    /** java doc view*/
+    public String JAVA_DOC = APP_CONTEXT + "/doc/index.html";
 }

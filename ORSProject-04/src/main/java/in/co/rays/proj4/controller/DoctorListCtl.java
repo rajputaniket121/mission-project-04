@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -37,6 +38,8 @@ import in.co.rays.proj4.util.ServletUtility;
 @WebServlet(name = "DoctorListCtl", urlPatterns = {"/ctl/DoctorListCtl"})
 public class DoctorListCtl extends BaseCtl {
 
+    private static final Logger log = Logger.getLogger(DoctorListCtl.class.getName());
+
     /**
      * Preloads the list of doctor specialties (experties) for search filter dropdown.
      *
@@ -44,6 +47,7 @@ public class DoctorListCtl extends BaseCtl {
      */
     @Override
     protected void preload(HttpServletRequest request) {
+        log.info("Inside preload method of DoctorListCtl");
         DoctorModel model = new DoctorModel();
         try {
             List<DoctorBean> doctorExpertiesList = model.list();
@@ -68,6 +72,7 @@ public class DoctorListCtl extends BaseCtl {
      */
     @Override
     protected BaseBean populateBean(HttpServletRequest request) {
+        log.info("Inside populateBean method of DoctorListCtl");
         DoctorBean bean = new DoctorBean();
         bean.setName(DataUtility.getString(request.getParameter("name")));
         bean.setDob(DataUtility.getDate(request.getParameter("dob")));
@@ -86,6 +91,7 @@ public class DoctorListCtl extends BaseCtl {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        log.info("Inside doGet method of DoctorListCtl");
 
         int pageNo = 1;
         int pageSize = DataUtility.getInt(PropertyReader.getValue("page.size"));
@@ -125,6 +131,7 @@ public class DoctorListCtl extends BaseCtl {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        log.info("Inside doPost method of DoctorListCtl");
 
         List<DoctorBean> list = null;
         List<DoctorBean> next = null;
@@ -200,6 +207,7 @@ public class DoctorListCtl extends BaseCtl {
      */
     @Override
     protected String getView() {
+        log.info("Inside getView method of DoctorListCtl");
         return ORSView.DOCTOR_LIST_VIEW;
     }
 }

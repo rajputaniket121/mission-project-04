@@ -2,10 +2,13 @@ package in.co.rays.proj4.controller;
 
 import java.io.IOException;
 import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
 
 import in.co.rays.proj4.bean.BaseBean;
 import in.co.rays.proj4.bean.RoleBean;
@@ -42,8 +45,10 @@ import in.co.rays.proj4.util.ServletUtility;
  *
  * @author 
  */
-@WebServlet(name = "UserListCtl", urlPatterns = {"/ctl/UserListCtl"})
+@WebServlet(name = "UserListCtl", urlPatterns = { "/ctl/UserListCtl" })
 public class UserListCtl extends BaseCtl {
+
+    private static final Logger log = Logger.getLogger(UserListCtl.class);
 
     /**
      * Preloads data for the view such as role list.
@@ -52,6 +57,7 @@ public class UserListCtl extends BaseCtl {
      */
     @Override
     protected void preload(HttpServletRequest request) {
+        log.debug("Inside preload method of UserListCtl");
         RoleModel model = new RoleModel();
         try {
             List<RoleBean> roleList = model.list();
@@ -69,6 +75,7 @@ public class UserListCtl extends BaseCtl {
      */
     @Override
     protected BaseBean populateBean(HttpServletRequest request) {
+        log.debug("Inside populateBean method of UserListCtl");
         UserBean bean = new UserBean();
         bean.setFirstName(DataUtility.getString(request.getParameter("firstName")));
         bean.setLogin(DataUtility.getString(request.getParameter("login")));
@@ -82,6 +89,7 @@ public class UserListCtl extends BaseCtl {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        log.debug("Inside doGet method of UserListCtl");
         int pageNo = 1;
         int pageSize = DataUtility.getInt(PropertyReader.getValue("page.size"));
         UserBean bean = (UserBean) populateBean(req);
@@ -110,6 +118,7 @@ public class UserListCtl extends BaseCtl {
      */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        log.debug("Inside doPost method of UserListCtl");
         List<UserBean> list = null;
         List<UserBean> next = null;
 
@@ -184,6 +193,7 @@ public class UserListCtl extends BaseCtl {
      */
     @Override
     protected String getView() {
+        log.debug("Inside getView method of UserListCtl");
         return ORSView.USER_LIST_VIEW;
     }
 }

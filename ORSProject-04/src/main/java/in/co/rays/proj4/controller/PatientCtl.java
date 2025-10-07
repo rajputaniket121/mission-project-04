@@ -2,6 +2,7 @@ package in.co.rays.proj4.controller;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -37,6 +38,8 @@ import in.co.rays.proj4.util.ServletUtility;
 @WebServlet(name = "PatientCtl", urlPatterns = "/ctl/PatientCtl")
 public class PatientCtl extends BaseCtl {
 
+    private static final Logger log = Logger.getLogger(PatientCtl.class.getName());
+
     /**
      * Preloads data required for patient form.
      * 
@@ -44,6 +47,7 @@ public class PatientCtl extends BaseCtl {
      */
     @Override
     protected void preload(HttpServletRequest request) {
+        log.info("Inside preload method of PatientCtl");
         HashMap<String, String> decease = new HashMap<>();
         decease.put("Diabetes", "Diabetes");
         decease.put("Hypertension", "Hypertension");
@@ -66,6 +70,7 @@ public class PatientCtl extends BaseCtl {
      */
     @Override
     protected boolean validate(HttpServletRequest request) {
+        log.info("Inside validate method of PatientCtl");
         boolean pass = true;
         String op = request.getParameter("operation");
 
@@ -116,6 +121,7 @@ public class PatientCtl extends BaseCtl {
      */
     @Override
     protected BaseBean populateBean(HttpServletRequest request) {
+        log.info("Inside populateBean method of PatientCtl");
         PatientBean bean = new PatientBean();
         bean.setId(DataUtility.getLong(request.getParameter("id")));
         bean.setName(DataUtility.getString(request.getParameter("name")));
@@ -138,6 +144,7 @@ public class PatientCtl extends BaseCtl {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        log.info("Inside doGet method of PatientCtl");
 
         Long id = DataUtility.getLong(req.getParameter("id"));
         PatientModel model = new PatientModel();
@@ -165,6 +172,7 @@ public class PatientCtl extends BaseCtl {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        log.info("Inside doPost method of PatientCtl");
 
         String op = DataUtility.getString(req.getParameter("operation"));
         PatientModel model = new PatientModel();
@@ -215,6 +223,7 @@ public class PatientCtl extends BaseCtl {
      */
     @Override
     protected String getView() {
+        log.info("Inside getView method of PatientCtl");
         return ORSView.PATIENT_VIEW;
     }
 }

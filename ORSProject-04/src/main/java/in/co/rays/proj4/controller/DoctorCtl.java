@@ -2,6 +2,7 @@ package in.co.rays.proj4.controller;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -37,6 +38,8 @@ import in.co.rays.proj4.util.ServletUtility;
 @WebServlet(name = "DoctorCtl", urlPatterns = "/ctl/DoctorCtl")
 public class DoctorCtl extends BaseCtl {
 
+    private static final Logger log = Logger.getLogger(DoctorCtl.class.getName());
+
     /**
      * Preloads specialties (experties) for doctor form dropdown.
      *
@@ -44,6 +47,7 @@ public class DoctorCtl extends BaseCtl {
      */
     @Override
     protected void preload(HttpServletRequest request) {
+        log.info("Inside preload method of DoctorCtl");
         HashMap<String, String> expertiesMap = new HashMap<>();
         expertiesMap.put("Cardiology", "Cardiology");
         expertiesMap.put("Dermatology", "Dermatology");
@@ -76,6 +80,7 @@ public class DoctorCtl extends BaseCtl {
      */
     @Override
     protected boolean validate(HttpServletRequest request) {
+        log.info("Inside validate method of DoctorCtl");
         boolean pass = true;
         String op = request.getParameter("operation");
 
@@ -126,6 +131,7 @@ public class DoctorCtl extends BaseCtl {
      */
     @Override
     protected BaseBean populateBean(HttpServletRequest request) {
+        log.info("Inside populateBean method of DoctorCtl");
         DoctorBean bean = new DoctorBean();
         bean.setId(DataUtility.getLong(request.getParameter("id")));
         bean.setName(DataUtility.getString(request.getParameter("name")));
@@ -148,6 +154,7 @@ public class DoctorCtl extends BaseCtl {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        log.info("Inside doGet method of DoctorCtl");
         Long id = DataUtility.getLong(req.getParameter("id"));
         DoctorModel model = new DoctorModel();
         if (id > 0) {
@@ -174,6 +181,7 @@ public class DoctorCtl extends BaseCtl {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        log.info("Inside doPost method of DoctorCtl");
 
         String op = DataUtility.getString(req.getParameter("operation"));
         DoctorModel model = new DoctorModel();
@@ -224,6 +232,7 @@ public class DoctorCtl extends BaseCtl {
      */
     @Override
     protected String getView() {
+        log.info("Inside getView method of DoctorCtl");
         return ORSView.DOCTOR_VIEW;
     }
 }
