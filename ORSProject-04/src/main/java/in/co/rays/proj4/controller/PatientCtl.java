@@ -2,7 +2,7 @@ package in.co.rays.proj4.controller;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,19 +21,6 @@ import in.co.rays.proj4.util.ServletUtility;
  * PatientCtl is a servlet controller class that handles CRUD operations
  * for Patient records in the application.
  *
- * <p>
- * It extends {@link BaseCtl} and provides functionality for:
- * <ul>
- *   <li>Preloading data for dropdowns (e.g., list of diseases)</li>
- *   <li>Validating patient form input</li>
- *   <li>Populating {@link PatientBean} from request parameters</li>
- *   <li>Handling GET and POST requests for add, update, and reset operations</li>
- * </ul>
- * </p>
- *
- * <p>
- * URL mapping: <code>/ctl/PatientCtl</code>
- * </p>
  */
 @WebServlet(name = "PatientCtl", urlPatterns = "/ctl/PatientCtl")
 public class PatientCtl extends BaseCtl {

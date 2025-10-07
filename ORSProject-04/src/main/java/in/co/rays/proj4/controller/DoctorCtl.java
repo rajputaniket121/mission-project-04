@@ -2,7 +2,7 @@ package in.co.rays.proj4.controller;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,19 +21,6 @@ import in.co.rays.proj4.util.ServletUtility;
  * DoctorCtl is a servlet controller that handles CRUD operations
  * for Doctor records in the application.
  *
- * <p>
- * It extends {@link BaseCtl} and provides functionality for:
- * <ul>
- *   <li>Preloading specialties (experties) for doctor form</li>
- *   <li>Validating doctor form input</li>
- *   <li>Populating {@link DoctorBean} from request parameters</li>
- *   <li>Handling GET and POST requests for add, update, reset, and cancel operations</li>
- * </ul>
- * </p>
- *
- * <p>
- * URL mapping: <code>/ctl/DoctorCtl</code>
- * </p>
  */
 @WebServlet(name = "DoctorCtl", urlPatterns = "/ctl/DoctorCtl")
 public class DoctorCtl extends BaseCtl {

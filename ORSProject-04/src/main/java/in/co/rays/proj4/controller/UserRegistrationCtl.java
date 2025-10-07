@@ -20,32 +20,6 @@ import in.co.rays.proj4.util.ServletUtility;
  * UserRegistrationCtl is a servlet controller class to handle the user
  * registration process.
  *
- * <p>
- * Responsibilities include:
- * <ul>
- *   <li>Validating user input from the registration form</li>
- *   <li>Populating a {@link UserBean} from request parameters</li>
- *   <li>Registering the user using {@link UserModel}</li>
- *   <li>Handling success and error messages</li>
- * </ul>
- * </p>
- *
- * <p>
- * This controller supports both GET and POST HTTP methods:
- * <ul>
- *   <li>GET: Forwards to the registration view</li>
- *   <li>POST: Processes user registration or resets the form</li>
- * </ul>
- * </p>
- *
- * <p>
- * Constants:
- * <ul>
- *   <li>{@link #OP_SIGN_UP} - Operation string for user sign up</li>
- * </ul>
- * </p>
- *
- * @author Aniket
  */
 @WebServlet(name = "UserRegistrationCtl", urlPatterns = { "/UserRegistrationCtl" })
 public class UserRegistrationCtl extends BaseCtl {

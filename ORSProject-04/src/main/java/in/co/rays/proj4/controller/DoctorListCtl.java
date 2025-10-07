@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,19 +21,6 @@ import in.co.rays.proj4.util.ServletUtility;
  * DoctorListCtl is a servlet controller that manages listing, searching,
  * pagination, and deletion of Doctor records in the application.
  *
- * <p>
- * It extends {@link BaseCtl} and provides functionality for:
- * <ul>
- *   <li>Preloading doctor specialties (experties) for search filters</li>
- *   <li>Populating {@link DoctorBean} from search form parameters</li>
- *   <li>Handling GET requests to display the doctor list with optional search criteria</li>
- *   <li>Handling POST requests for search, pagination, deletion, reset, and new doctor redirect</li>
- * </ul>
- * </p>
- *
- * <p>
- * URL mapping: <code>/ctl/DoctorListCtl</code>
- * </p>
  */
 @WebServlet(name = "DoctorListCtl", urlPatterns = {"/ctl/DoctorListCtl"})
 public class DoctorListCtl extends BaseCtl {

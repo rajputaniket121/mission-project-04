@@ -1,1 +1,1 @@
-typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"in.co.rays.proj4.controller","l":"DoctorCtl"}]
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"in.co.rays.proj4.bean","l":"BaseBean"}]

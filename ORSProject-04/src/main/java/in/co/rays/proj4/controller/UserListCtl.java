@@ -24,26 +24,7 @@ import in.co.rays.proj4.util.ServletUtility;
  * UserListCtl is a servlet controller class to manage the display and operations
  * on the list of users in the system.
  *
- * <p>
- * Responsibilities include:
- * <ul>
- *   <li>Preloading role list for filters</li>
- *   <li>Searching users based on filters and pagination</li>
- *   <li>Deleting selected users</li>
- *   <li>Handling navigation operations like next, previous, reset, new, and back</li>
- *   <li>Forwarding results to the user list view with proper messages</li>
- * </ul>
- * </p>
  *
- * <p>
- * Supports GET and POST HTTP methods:
- * <ul>
- *   <li>GET: Loads the initial list of users</li>
- *   <li>POST: Handles search, pagination, deletion, and navigation operations</li>
- * </ul>
- * </p>
- *
- * @author 
  */
 @WebServlet(name = "UserListCtl", urlPatterns = { "/ctl/UserListCtl" })
 public class UserListCtl extends BaseCtl {

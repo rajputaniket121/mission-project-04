@@ -21,19 +21,6 @@ import in.co.rays.proj4.util.ServletUtility;
 /**
  * LoginCtl is a servlet controller that handles user login and logout operations.
  *
- * <p>
- * Features include:
- * <ul>
- *   <li>User login authentication</li>
- *   <li>Redirecting users based on role or requested URI</li>
- *   <li>User logout handling</li>
- *   <li>Redirect to registration page for new users</li>
- * </ul>
- * </p>
- *
- * <p>
- * URL mapping: <code>/LoginCtl</code>
- * </p>
  */
 @WebServlet(name = "LoginCtl", urlPatterns = { "/LoginCtl" })
 public class LoginCtl extends BaseCtl {

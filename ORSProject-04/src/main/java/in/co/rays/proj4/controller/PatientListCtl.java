@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,18 +21,6 @@ import in.co.rays.proj4.util.ServletUtility;
  * PatientListCtl is a servlet controller that handles listing, searching,
  * pagination, and deletion of Patient records.
  *
- * <p>
- * It extends {@link BaseCtl} and provides functionality for:
- * <ul>
- *   <li>Preloading patient disease list for search filters</li>
- *   <li>Populating {@link PatientBean} from search form parameters</li>
- *   <li>Handling GET and POST requests for search, pagination, deletion, reset, and new patient redirect</li>
- * </ul>
- * </p>
- *
- * <p>
- * URL mapping: <code>/ctl/PatientListCtl</code>
- * </p>
  */
 @WebServlet(name = "PatientListCtl", urlPatterns = {"/ctl/PatientListCtl"})
 public class PatientListCtl extends BaseCtl {

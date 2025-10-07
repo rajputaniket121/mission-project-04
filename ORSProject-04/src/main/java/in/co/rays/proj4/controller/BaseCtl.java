@@ -1,12 +1,11 @@
 package in.co.rays.proj4.controller;
 
 import java.io.IOException;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import in.co.rays.proj4.bean.BaseBean;
 import in.co.rays.proj4.bean.UserBean;
 import in.co.rays.proj4.util.DataUtility;
@@ -20,21 +19,8 @@ import in.co.rays.proj4.util.ServletUtility;
  * for all servlets in the project. It extends HttpServlet and includes
  * constants, validation, preload, and DTO population methods.
  *
- * <p>
- * This class defines common operations such as Save, Update, Delete, etc.,
- * and provides mechanisms to:
- * <ul>
- *   <li>Validate user input</li>
- *   <li>Preload data before page load</li>
- *   <li>Populate Beans from HttpServletRequest</li>
- *   <li>Populate DTOs with audit fields like createdBy and modifiedBy</li>
- * </ul>
- * </p>
- *
- * <p>
  * All child controllers must extend this class and implement the {@link #getView()} method
  * to return the view (JSP) name associated with the controller.
- * </p>
  */
 public abstract class BaseCtl extends HttpServlet {
 
