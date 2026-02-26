@@ -103,18 +103,15 @@
 
  		if (userBean.getRoleId() == RoleBean.ADMIN) {
  %> | <a href="<%=ORSView.JAVA_DOC%>" target="blank">Java Doc</a> | <a
- 	 href="<%=ORSView.PATIENT_CTL%>" >Add Patient</a>
- 	 | <a
- 	 href="<%=ORSView.PATIENT_LIST_CTL%>" >Patient List</a>
- 	 | <a
- 	 href="<%=ORSView.DOCTOR_CTL%>" >Add Doctor</a>
- 	 | <a
- 	 href="<%=ORSView.DOCTOR_LIST_CTL%>" >Doctor List</a>
- <%
+			href="<%=ORSView.PATIENT_CTL%>">Add Patient</a> | <a
+			href="<%=ORSView.PATIENT_LIST_CTL%>">Patient List</a> | <a
+			href="<%=ORSView.DOCTOR_CTL%>">Add Doctor</a> | <a
+			href="<%=ORSView.DOCTOR_LIST_CTL%>">Doctor List</a> | <a
+			href="<%=ORSView.ROUTE_CTL%>">Add Route</a> | <a
+			href="<%=ORSView.ROUTE_LIST_CTL%>">Route List</a> <%
  	}
  	} else {
- %> <a href="<%=ORSView.LOGIN_CTL%>"></a>
-  <%
+ %> <a href="<%=ORSView.LOGIN_CTL%>"></a> <%
 		 
  	}
  %></td>

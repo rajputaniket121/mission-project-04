@@ -46,6 +46,14 @@ public class DataUtility {
 			return 0;
 		}
 	}
+	
+	public static double getDouble(String parameter) {
+		if (DataValidator.isDouble(parameter)) {
+			return Double.parseDouble(parameter);
+		} else {
+			return 0.0;
+		}
+	}
 
 	public static Date getDate(String val) {
 		Date date = null;
@@ -162,4 +170,6 @@ public class DataUtility {
 		System.out.println("\ngetTimestamp(Timestamp) Test:");
 		System.out.println("Timestamp to long: " + getTimestamp(currentTimestamp));
 	}
+
+	
 }

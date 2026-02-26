@@ -147,4 +147,12 @@ public interface ORSView {
     public String ERROR_CTL = APP_CONTEXT + "/ErrorCtl";
     /** java doc view*/
     public String JAVA_DOC = APP_CONTEXT + "/doc/index.html";
+    
+    
+    /** Views and controllers for route management */
+    public String ROUTE_VIEW = PAGE_FOLDER + "/RouteView.jsp";
+    public String ROUTE_CTL = APP_CONTEXT + "/ctl/RouteCtl";
+
+    public String ROUTE_LIST_VIEW = PAGE_FOLDER + "/RouteListView.jsp";
+    public String ROUTE_LIST_CTL = APP_CONTEXT + "/ctl/RouteListCtl";
 }

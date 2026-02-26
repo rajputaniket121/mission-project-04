@@ -43,6 +43,20 @@ public class DataValidator {
 		}
 	}
 	
+	public static boolean isDouble(String value) {
+		if(isNotNull(value)) {
+			try {
+				Double.parseDouble(value);
+				return true;
+			} catch (NumberFormatException e) {
+				return false;
+			}
+		}else {
+			return false;
+		}
+	}
+	
+	
 	
 	public static boolean isEmail(String value) {
 		String emailRegix = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
@@ -221,6 +235,7 @@ public class DataValidator {
 		System.out.println("Date on Sunday: '10/13/2024' -> " + isSunday("10/13/2024"));
 		System.out.println("Date not on Sunday: '10/15/2024' -> " + isSunday("10/15/2024"));
 	}
+
 	
 
 }

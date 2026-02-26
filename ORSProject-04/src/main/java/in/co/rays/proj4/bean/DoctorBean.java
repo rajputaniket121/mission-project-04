@@ -8,8 +8,6 @@ public class DoctorBean extends BaseBean{
 	private String mobile;
 	private String experties;
 	
-	
-	
 	public String getName() {
 		return name;
 	}
