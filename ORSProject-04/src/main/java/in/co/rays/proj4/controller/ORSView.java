@@ -155,4 +155,11 @@ public interface ORSView {
 
     public String ROUTE_LIST_VIEW = PAGE_FOLDER + "/RouteListView.jsp";
     public String ROUTE_LIST_CTL = APP_CONTEXT + "/ctl/RouteListCtl";
+    
+    
+    /** Views and controllers for school attendance management */
+    public String SCHOOL_ATTENDANCE_VIEW = PAGE_FOLDER + "/SchoolAttendanceView.jsp";
+    public String SCHOOL_ATTENDANCE_CTL = APP_CONTEXT + "/ctl/SchoolAttendanceCtl";
+    public String SCHOOL_ATTENDANCE_LIST_VIEW = PAGE_FOLDER + "/SchoolAttendanceListView.jsp";
+    public String SCHOOL_ATTENDANCE_LIST_CTL = APP_CONTEXT + "/ctl/SchoolAttendanceListCtl";
 }
