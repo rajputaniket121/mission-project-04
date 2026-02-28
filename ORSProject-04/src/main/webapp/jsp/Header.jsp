@@ -110,10 +110,13 @@ if (userLoggedIn) {
 			href="<%=ORSView.ROUTE_CTL%>">Add Route</a> | <a
 			href="<%=ORSView.ROUTE_LIST_CTL%>">Route List</a> | <a
 			href="<%=ORSView.SCHOOL_ATTENDANCE_CTL%>">Add Attendance</a> | <a
-			href="<%=ORSView.SCHOOL_ATTENDANCE_LIST_CTL%>">Attendance List</a> <%
- }
- } else {
- %> <a href="<%=ORSView.LOGIN_CTL%>"></a> <%
+			href="<%=ORSView.SCHOOL_ATTENDANCE_LIST_CTL%>">Attendance List</a> |
+			<a href="<%=ORSView.INSURANCE_CTL%>">Add Insurance</a> | <a
+			href="<%=ORSView.INSURANCE_LIST_CTL%>">Insurance List</a>
+			<%
+			}
+			} else {
+			%> <a href="<%=ORSView.LOGIN_CTL%>"></a> <%
  }
  %></td>
 

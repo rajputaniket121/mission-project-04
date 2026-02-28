@@ -162,4 +162,10 @@ public interface ORSView {
     public String SCHOOL_ATTENDANCE_CTL = APP_CONTEXT + "/ctl/SchoolAttendanceCtl";
     public String SCHOOL_ATTENDANCE_LIST_VIEW = PAGE_FOLDER + "/SchoolAttendanceListView.jsp";
     public String SCHOOL_ATTENDANCE_LIST_CTL = APP_CONTEXT + "/ctl/SchoolAttendanceListCtl";
+    
+    /** Views and controllers for insurance management */
+    public String INSURANCE_VIEW = PAGE_FOLDER + "/InsuranceView.jsp";
+    public String INSURANCE_CTL = APP_CONTEXT + "/ctl/InsuranceCtl";
+    public String INSURANCE_LIST_VIEW = PAGE_FOLDER + "/InsuranceListView.jsp";
+    public String INSURANCE_LIST_CTL = APP_CONTEXT + "/ctl/InsuranceListCtl";
 }
