@@ -28,14 +28,13 @@ public class InsuranceCtl extends BaseCtl {
 			return pass;
 		}
 
-		String insuranceCode = request.getParameter("insuranceCode");
 
-		if (DataValidator.isNull(insuranceCode)) {
+		if (DataValidator.isNull(request.getParameter("insuranceCode"))) {
 			request.setAttribute("insuranceCode", PropertyReader.getValue("error.require", "Insurance Code"));
 			pass = false;
 
-		} else if (!insuranceCode.matches("^INS-\\d+$")) {
-			request.setAttribute("insuranceCode", "Insurance Code must be in format INS-123");
+		} else if (DataValidator.isValidPattern(request.getParameter("insuranceCode"))) {
+			request.setAttribute("insuranceCode", "Invalid Format");
 			pass = false;
 		}
 

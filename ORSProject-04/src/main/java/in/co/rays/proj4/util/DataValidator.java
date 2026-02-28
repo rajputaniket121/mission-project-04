@@ -17,6 +17,14 @@ public class DataValidator {
 		return !isNull(value);
 	}
 	
+	public static boolean isValidPattern(String value) {
+		if(!value.matches("^[A-Z]{3}-\\d+$")) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
 	public static boolean isInteger(String value) {
 		if(isNotNull(value)) {
 			try {
