@@ -112,8 +112,9 @@ if (userLoggedIn) {
 			href="<%=ORSView.SCHOOL_ATTENDANCE_CTL%>">Add Attendance</a> | <a
 			href="<%=ORSView.SCHOOL_ATTENDANCE_LIST_CTL%>">Attendance List</a> |
 			<a href="<%=ORSView.INSURANCE_CTL%>">Add Insurance</a> | <a
-			href="<%=ORSView.INSURANCE_LIST_CTL%>">Insurance List</a>
-			<%
+			href="<%=ORSView.INSURANCE_LIST_CTL%>">Insurance List</a> | <a
+			href="<%=ORSView.NGO_CTL%>">Add NGO</a> | <a
+			href="<%=ORSView.NGO_LIST_CTL%>">NGO List</a> <%
 			}
 			} else {
 			%> <a href="<%=ORSView.LOGIN_CTL%>"></a> <%

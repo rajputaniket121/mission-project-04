@@ -168,4 +168,10 @@ public interface ORSView {
     public String INSURANCE_CTL = APP_CONTEXT + "/ctl/InsuranceCtl";
     public String INSURANCE_LIST_VIEW = PAGE_FOLDER + "/InsuranceListView.jsp";
     public String INSURANCE_LIST_CTL = APP_CONTEXT + "/ctl/InsuranceListCtl";
+    
+    /** Views and controllers for NGO management */
+    public String NGO_VIEW = PAGE_FOLDER + "/NGOView.jsp";
+    public String NGO_CTL = APP_CONTEXT + "/ctl/NGOCtl";
+    public String NGO_LIST_VIEW = PAGE_FOLDER + "/NGOListView.jsp";
+    public String NGO_LIST_CTL = APP_CONTEXT + "/ctl/NGOListCtl";
 }
