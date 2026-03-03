@@ -114,10 +114,12 @@ if (userLoggedIn) {
 			<a href="<%=ORSView.INSURANCE_CTL%>">Add Insurance</a> | <a
 			href="<%=ORSView.INSURANCE_LIST_CTL%>">Insurance List</a> | <a
 			href="<%=ORSView.NGO_CTL%>">Add NGO</a> | <a
-			href="<%=ORSView.NGO_LIST_CTL%>">NGO List</a> <%
-			}
-			} else {
-			%> <a href="<%=ORSView.LOGIN_CTL%>"></a> <%
+			href="<%=ORSView.NGO_LIST_CTL%>">NGO List</a> | <a
+			href="<%=ORSView.LOCKER_CTL%>">Add Locker</a> | <a
+			href="<%=ORSView.LOCKER_LIST_CTL%>">Locker List</a> <%
+ }
+ } else {
+ %> <a href="<%=ORSView.LOGIN_CTL%>"></a> <%
  }
  %></td>
 

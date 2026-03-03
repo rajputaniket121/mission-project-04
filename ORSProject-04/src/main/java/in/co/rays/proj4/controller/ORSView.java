@@ -174,4 +174,11 @@ public interface ORSView {
     public String NGO_CTL = APP_CONTEXT + "/ctl/NGOCtl";
     public String NGO_LIST_VIEW = PAGE_FOLDER + "/NGOListView.jsp";
     public String NGO_LIST_CTL = APP_CONTEXT + "/ctl/NGOListCtl";
+    
+    
+    /** Views and controllers for locker management */
+    public String LOCKER_VIEW = PAGE_FOLDER + "/LockerView.jsp";
+    public String LOCKER_CTL = APP_CONTEXT + "/ctl/LockerCtl";
+    public String LOCKER_LIST_VIEW = PAGE_FOLDER + "/LockerListView.jsp";
+    public String LOCKER_LIST_CTL = APP_CONTEXT + "/ctl/LockerListCtl";
 }
