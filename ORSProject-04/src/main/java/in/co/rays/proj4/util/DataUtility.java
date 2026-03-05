@@ -51,7 +51,7 @@ public class DataUtility {
 		if (DataValidator.isDouble(parameter)) {
 			return Double.parseDouble(parameter);
 		} else {
-			return 0.0;
+			return -1;
 		}
 	}
 

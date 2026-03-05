@@ -181,4 +181,10 @@ public interface ORSView {
     public String LOCKER_CTL = APP_CONTEXT + "/ctl/LockerCtl";
     public String LOCKER_LIST_VIEW = PAGE_FOLDER + "/LockerListView.jsp";
     public String LOCKER_LIST_CTL = APP_CONTEXT + "/ctl/LockerListCtl";
+    
+    /** Views and controllers for portfolio management */
+    public String PORTFOLIO_VIEW = PAGE_FOLDER + "/PortfolioView.jsp";
+    public String PORTFOLIO_CTL = APP_CONTEXT + "/ctl/PortfolioCtl";
+    public String PORTFOLIO_LIST_VIEW = PAGE_FOLDER + "/PortfolioListView.jsp";
+    public String PORTFOLIO_LIST_CTL = APP_CONTEXT + "/ctl/PortfolioListCtl";
 }
