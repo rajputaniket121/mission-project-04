@@ -118,11 +118,14 @@ if (userLoggedIn) {
 			href="<%=ORSView.LOCKER_CTL%>">Add Locker</a> | <a
 			href="<%=ORSView.LOCKER_LIST_CTL%>">Locker List</a> | <a
 			href="<%=ORSView.PORTFOLIO_CTL%>">Add Portfolio</a> | <a
-			href="<%=ORSView.PORTFOLIO_LIST_CTL%>">Portfolio List</a>
-			<%
-			}
-			} else {
-			%> <a href="<%=ORSView.LOGIN_CTL%>"></a> <%
+			href="<%=ORSView.PORTFOLIO_LIST_CTL%>">Portfolio List</a> | <a
+			href="<%=ORSView.INVESTOR_CTL%>">Add Investor</a> | <a
+			href="<%=ORSView.INVESTOR_LIST_CTL%>">Investor List</a>| <a
+			href="<%=ORSView.EXPENSE_REPORT_CTL%>">Add Expense</a> | <a
+			href="<%=ORSView.EXPENSE_REPORT_LIST_CTL%>">Expense List</a> <%
+ }
+ } else {
+ %> <a href="<%=ORSView.LOGIN_CTL%>"></a> <%
  }
  %></td>
 

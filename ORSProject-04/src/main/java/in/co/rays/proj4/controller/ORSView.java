@@ -187,4 +187,17 @@ public interface ORSView {
     public String PORTFOLIO_CTL = APP_CONTEXT + "/ctl/PortfolioCtl";
     public String PORTFOLIO_LIST_VIEW = PAGE_FOLDER + "/PortfolioListView.jsp";
     public String PORTFOLIO_LIST_CTL = APP_CONTEXT + "/ctl/PortfolioListCtl";
+    
+    /** Views and controllers for investor management */
+    public String INVESTOR_VIEW = PAGE_FOLDER + "/InvestorView.jsp";
+    public String INVESTOR_CTL = APP_CONTEXT + "/ctl/InvestorCtl";
+    public String INVESTOR_LIST_VIEW = PAGE_FOLDER + "/InvestorListView.jsp";
+    public String INVESTOR_LIST_CTL = APP_CONTEXT + "/ctl/InvestorListCtl";
+    
+    
+    /** Views and controllers for expense report management */
+    public String EXPENSE_REPORT_VIEW = PAGE_FOLDER + "/ExpenseReportView.jsp";
+    public String EXPENSE_REPORT_CTL = APP_CONTEXT + "/ctl/ExpenseReportCtl";
+    public String EXPENSE_REPORT_LIST_VIEW = PAGE_FOLDER + "/ExpenseReportListView.jsp";
+    public String EXPENSE_REPORT_LIST_CTL = APP_CONTEXT + "/ctl/ExpenseReportListCtl";
 }
