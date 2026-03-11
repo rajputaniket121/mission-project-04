@@ -200,4 +200,16 @@ public interface ORSView {
     public String EXPENSE_REPORT_CTL = APP_CONTEXT + "/ctl/ExpenseReportCtl";
     public String EXPENSE_REPORT_LIST_VIEW = PAGE_FOLDER + "/ExpenseReportListView.jsp";
     public String EXPENSE_REPORT_LIST_CTL = APP_CONTEXT + "/ctl/ExpenseReportListCtl";
+    
+    /** Views and controllers for meeting room management */
+    public String MEETING_ROOM_VIEW = PAGE_FOLDER + "/MeetingRoomView.jsp";
+    public String MEETING_ROOM_CTL = APP_CONTEXT + "/ctl/MeetingRoomCtl";
+    public String MEETING_ROOM_LIST_VIEW = PAGE_FOLDER + "/MeetingRoomListView.jsp";
+    public String MEETING_ROOM_LIST_CTL = APP_CONTEXT + "/ctl/MeetingRoomListCtl";
+    
+    /** Views and controllers for art gallery management */
+    public String ART_GALLERY_VIEW = PAGE_FOLDER + "/ArtGalleryView.jsp";
+    public String ART_GALLERY_CTL = APP_CONTEXT + "/ctl/ArtGalleryCtl";
+    public String ART_GALLERY_LIST_VIEW = PAGE_FOLDER + "/ArtGalleryListView.jsp";
+    public String ART_GALLERY_LIST_CTL = APP_CONTEXT + "/ctl/ArtGalleryListCtl";
 }

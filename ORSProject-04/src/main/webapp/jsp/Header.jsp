@@ -122,10 +122,15 @@ if (userLoggedIn) {
 			href="<%=ORSView.INVESTOR_CTL%>">Add Investor</a> | <a
 			href="<%=ORSView.INVESTOR_LIST_CTL%>">Investor List</a>| <a
 			href="<%=ORSView.EXPENSE_REPORT_CTL%>">Add Expense</a> | <a
-			href="<%=ORSView.EXPENSE_REPORT_LIST_CTL%>">Expense List</a> <%
- }
- } else {
- %> <a href="<%=ORSView.LOGIN_CTL%>"></a> <%
+			href="<%=ORSView.EXPENSE_REPORT_LIST_CTL%>">Expense List</a> | <a
+			href="<%=ORSView.MEETING_ROOM_CTL%>">Add Meeting Room</a> | <a
+			href="<%=ORSView.MEETING_ROOM_LIST_CTL%>">Meeting Room List</a> | <a
+			href="<%=ORSView.ART_GALLERY_CTL%>">Add Artwork</a> | <a
+			href="<%=ORSView.ART_GALLERY_LIST_CTL%>">Artwork List</a>
+			<%
+			}
+			} else {
+			%> <a href="<%=ORSView.LOGIN_CTL%>"></a> <%
  }
  %></td>
 
